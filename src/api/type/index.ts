@@ -1,3 +1,7 @@
-import type { AxiosRequestConfig, AxiosInstance } from 'axios'
+import type { AxiosRequestConfig, AxiosInstance, AxiosInterceptorManager } from 'axios'
 
-export { AxiosRequestConfig, AxiosInstance }
+// interface InterceptorsConfig{
+//     reqFn:(value: V) => T | Promise<T>,
+// }
+
+export { AxiosRequestConfig, AxiosInstance, AxiosInterceptorManager }
