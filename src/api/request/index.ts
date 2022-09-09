@@ -20,9 +20,7 @@ export class RequestHy {
             this.interceptorsFn?.resRejFn
         )
     }
-    request(config: AxiosRequestConfig) {
-        this.instance.request(config).then((res) => {
-            console.log(res, '1111')
-        })
+    async request<T>(config: AxiosRequestConfig): Promise<T> {
+        return await this.instance.request<any, T>(config)
     }
 }

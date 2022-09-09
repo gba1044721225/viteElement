@@ -1,7 +1,11 @@
-<script setup lang="ts"></script>
-
 <template>
-    <div></div>
+    <div class="vite-app">
+        <Layout></Layout>
+    </div>
 </template>
 
-<style scoped></style>
+<script setup lang="ts">
+import Layout from '@/layout/index.vue'
+</script>
+
+<style scoped lang="scss"></style>

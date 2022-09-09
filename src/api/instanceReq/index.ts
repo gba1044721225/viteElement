@@ -1,7 +1,8 @@
 import { RequestHy } from '@/api/request'
+const env = import.meta.env
 
 export const myReq = new RequestHy({
-    // baseURL: 'http://127.0.0.1:8080', // /Student/getStu  http://127.0.0.1:8080/  http://127.0.0.1:80/a/
+    baseURL: env.VITE_APP_BASE_API,
     timeout: 5000,
     interceptorsFn: {
         reqFn(config) {
