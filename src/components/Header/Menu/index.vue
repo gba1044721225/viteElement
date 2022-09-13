@@ -1,89 +1,106 @@
 <template>
     <div class="custom-menu">
-        <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
-            <el-tab-pane :name="item.index" v-for="item in menuList" :key="item.index">
-                <template #label>
-                    <div class="tab-label label-index-logo" v-if="item.index < 0">
-                        <img :src="item.img" alt="" />
-                        <span>{{ item.label }}</span>
-                    </div>
-                    <div class="tab-label" v-else>
-                        <span>{{ item.label }}</span>
-                    </div>
-                </template>
-            </el-tab-pane>
-        </el-tabs>
+        <div class="tab-item logo">
+            <img src="@/assets/vue.svg" alt="" />
+            <div class="logo">logo</div>
+        </div>
+        <div
+            class="tab-item"
+            v-for="item in tabList"
+            :key="item.id"
+            @click="changeTab(item)"
+            :class="{ isActivted: item.id == currentId }"
+        >
+            <div class="label">
+                {{ item.label }}
+            </div>
+        </div>
     </div>
 </template>
-<script lang="ts" setup>
-import type { TabsPaneContext, TabPanelName } from 'element-plus'
-const menuList = reactive([
-    {
-        label: '网站名字',
-        img: new URL('../../../assets/vue.svg', import.meta.url).href,
-        index: '-1'
-    },
-    {
-        label: '首页',
-        index: 0
-    },
-    {
-        label: '分类',
-        index: 1
-    },
-    {
-        label: '专题',
-        index: 2
-    },
-    {
-        label: '工具',
-        index: 3
-    },
-    {
-        label: '留言',
-        index: 4
-    },
-    {
-        label: '资料分享',
-        index: 5
-    }
-])
 
-const activeName = ref(0)
+<script setup lang="ts">
+import type { Ref } from 'vue'
+interface Iitem {
+    isActive: boolean
+    id: string
+    label: string
+}
+interface Iprops {
+    tabList?: Iitem[]
+}
+const props = withDefaults(defineProps<Iprops>(), {
+    tabList: () => [
+        {
+            isActive: false,
+            id: 'home',
+            label: '首页'
+        },
+        {
+            isActive: false,
+            id: 'category',
+            label: '分类'
+        },
+        {
+            isActive: false,
+            id: 'theme',
+            label: '主题'
+        },
+        {
+            isActive: false,
+            id: 'tool',
+            label: '工具'
+        },
+        {
+            isActive: false,
+            id: 'message',
+            label: '留言'
+        },
+        {
+            isActive: false,
+            id: 'sharing',
+            label: '分享'
+        }
+    ]
+})
 
-const handleClick = (tab: TabsPaneContext, event: Event) => {
-    if (tab.index === '0') {
-        activeName.value = 999
-        return
-    }
-    console.log(activeName.value)
-    // console.log(tab, event)
+const currentId: Ref<string> = ref('')
+
+const changeTab = (item: Iitem) => {
+    currentId.value = item.id
 }
 </script>
+
 <style lang="scss" scoped>
 .custom-menu {
-    padding-top: 10px;
+    // height: $head-height;
     display: flex;
-    align-items: center;
-    width: 100%;
-    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
-
-    .demo-tabs > .el-tabs__content {
-        color: #6b778c;
-        font-size: 16px;
-        font-weight: 600;
-    }
-    .tab-label {
-        font-size: 14px;
-    }
-    .label-index-logo {
-        img {
-            height: 30px;
-            vertical-align: middle;
+    flex-wrap: nowrap;
+    cursor: pointer;
+    font-family: 'wryh';
+    .tab-item {
+        flex: 1;
+        // box-sizing: border-box;
+        padding: 10px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .label {
+            text-align: center;
         }
+        border-bottom: 2px solid rgba(21, 124, 198, 0);
     }
-    :deep(.el-tabs__nav-wrap::after) {
-        background-color: #fff;
+    .tab-item:hover {
+        color: rgba(0, 0, 0, 0.7);
+    }
+    .isActivted {
+        border-bottom: 2px solid rgba(21, 124, 198, 1);
+    }
+
+    .tab-item.logo {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: center;
+        align-items: center;
     }
 }
 </style>
