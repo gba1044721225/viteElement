@@ -8,20 +8,30 @@ const routes: RouteRecordRaw[] = [
     },
     {
         path: '/layout',
-        component: () => import('@/layout/index.vue')
-        // children: [
-        //     {
-        //         path: '',
-        //         redirect: '/layout/home'
-        //     },
-        //     {
-        //         path: 'news',
-        //         component: () => import('@/views/Recommendation/News/index.vue'),
-        //         meta: {
-        //             title: '首页'
-        //         }
-        //     }
-        // ]
+        component: () => import('@/layout/index.vue'),
+        children: [
+            {
+                path: '',
+                redirect: '/layout/layout-main'
+            },
+            {
+                path: 'layout-main',
+                component: () => import('@/views/LayoutMain/index.vue'),
+                meta: {
+                    title: '首页'
+                },
+                children: [
+                    {
+                        path: '',
+                        redirect: '/layout/layout-main/home'
+                    },
+                    {
+                        path: 'home',
+                        component: () => import('@/views/Home/index.vue')
+                    }
+                ]
+            }
+        ]
     }
 ]
 

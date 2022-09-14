@@ -1,11 +1,9 @@
 <template>
-    <layout-swiper></layout-swiper>
-    <layout-main></layout-main>
+    <div class="layout-main">
+        <router-view></router-view>
+    </div>
 </template>
 
-<script setup lang="ts">
-import LayoutSwiper from '@/views/Swiper/index.vue'
-import LayoutMain from '@/views/Home/index.vue'
-</script>
+<script setup lang="ts"></script>
 
-<style scoped lang="scss"></style>
+<style lang="scss" scoped></style>

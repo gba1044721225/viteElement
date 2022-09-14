@@ -63,7 +63,7 @@ const props = withDefaults(defineProps<Iprops>(), {
     ]
 })
 
-const currentId: Ref<string> = ref('')
+const currentId: Ref<string> = ref(props.tabList[0].id)
 
 const changeTab = (item: Iitem) => {
     currentId.value = item.id

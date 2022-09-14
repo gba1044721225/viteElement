@@ -59,7 +59,7 @@ export default ({ command, mode }) => {
             })
         ],
         server: {
-            host: '192.168.43.11', //127.0.0.1
+            host: '127.0.0.1', //127.0.0.1 192.168.43.11
             //port: Number(loadEnv(mode, process.cwd()).VITE_APP_PORT),
             port: 3000,
             strictPort: true, // 端口被占用直接退出
