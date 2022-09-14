@@ -2,7 +2,6 @@
     <div class="custom-swiper">
         <swiper
             :slidesPerView="1"
-            :spaceBetween="30"
             :cssMode="true"
             :navigation="true"
             :loop="true"
@@ -84,7 +83,8 @@ const imgList = ref([
         width: 100%;
         height: 300px;
         // height: 100%;
-        // object-fit: cover;
+        object-fit: cover;
+        object-position: 50% 50%;
     }
 }
 </style>

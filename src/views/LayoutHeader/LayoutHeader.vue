@@ -14,11 +14,18 @@ import CustomLoginAndRegist from '@/components/Header/LoginAndRegist/index.vue'
 
 <style scoped lang="scss">
 .layout-header {
+    overflow-x: scroll;
+    min-height: 40px; /* px-to-viewport-ignore */
     height: $head-height;
     box-sizing: border-box;
     padding: 0 $pad-page;
     display: flex;
     box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 999;
     .custom-menu {
         flex: 4;
     }
@@ -29,5 +36,8 @@ import CustomLoginAndRegist from '@/components/Header/LoginAndRegist/index.vue'
     .custom-login-and-regist {
         flex: 1;
     }
+}
+.layout-header::-webkit-scrollbar {
+    display: none;
 }
 </style>

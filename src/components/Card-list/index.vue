@@ -4,6 +4,10 @@
             <slot name="title">
                 <div class="content">标题</div>
             </slot>
+            <div class="more">
+                <span>更多</span>
+                <el-icon><ArrowRight /></el-icon>
+            </div>
         </div>
 
         <div :class="className">
@@ -39,6 +43,13 @@ const props = withDefaults(defineProps<Iprops>(), {
     padding: 0 $pad-page;
     .title {
         border-left: 2px solid rgb(30, 84, 209);
+        display: flex;
+        justify-content: space-between;
+        .more {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
         .content {
             padding: 0 20px;
         }

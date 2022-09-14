@@ -1,6 +1,6 @@
 <template>
     <div class="vite-app">
-        <Layout></Layout>
+        <router-view></router-view>
     </div>
 </template>
 

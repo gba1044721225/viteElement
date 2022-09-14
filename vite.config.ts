@@ -59,7 +59,7 @@ export default ({ command, mode }) => {
             })
         ],
         server: {
-            host: '127.0.0.1',
+            host: '192.168.43.11', //127.0.0.1
             //port: Number(loadEnv(mode, process.cwd()).VITE_APP_PORT),
             port: 3000,
             strictPort: true, // 端口被占用直接退出
@@ -102,7 +102,7 @@ export default ({ command, mode }) => {
                         unitToConvert: 'px', // 需要转换的单位，默认为"px"
                         viewportWidth: 1024, // 设计稿的视窗宽度
                         unitPrecision: 5, // 单位转换后保留的精度
-                        propList: ['*', '!font-size'], // 能转化为 vw 的属性列表
+                        propList: ['*', '!font-size'], // 能转化为 vw 的属性列表 '!font-size'去除字体
                         viewportUnit: 'vw', // 希望使用的视窗单位
                         fontViewportUnit: 'vw', // 字体使用的视窗单位
                         selectorBlackList: [], // 需要忽略的 CSS 选择器，不会转为视窗单位，使用原有的 px 等单位
