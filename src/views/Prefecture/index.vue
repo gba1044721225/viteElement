@@ -88,16 +88,15 @@ const toolCard = reactive({
 <style lang="scss">
 .prefecture {
     --radius: 2px;
-    h3 {
-        padding: 0 20px;
-    }
+    // h3 {
+    //     padding: 0 20px;
+    // }
 }
 // 特色专区
 .special-list {
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
-    margin-top: 20px;
     .item {
         border-radius: var(--radius);
         cursor: pointer;
@@ -113,6 +112,7 @@ const toolCard = reactive({
                 display: block;
             }
             .text {
+                padding: 20px 0;
                 border-radius: var(--radius);
                 border-top-right-radius: 0;
                 border-top-left-radius: 0;
@@ -121,15 +121,15 @@ const toolCard = reactive({
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                background-color: rgba(0, 0, 0, 0.2);
+                background-color: rgba(250, 250, 250, 1);
             }
         }
     }
     .item:nth-child(n + 2) {
-        margin-left: 15px;
+        margin-left: $prefecture-card-margin;
     }
     .item:hover {
-        transform: scale(1.05);
+        transform: scale(1.1);
         box-shadow: -2px 2px 10px 2px rgba(0, 0, 0, 0.2);
     }
 }
@@ -138,7 +138,6 @@ const toolCard = reactive({
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
-    margin-top: 20px;
     .item {
         border-radius: var(--radius);
         cursor: pointer;
@@ -158,10 +157,10 @@ const toolCard = reactive({
         }
     }
     .item:nth-child(n + 2) {
-        margin-left: 15px;
+        margin-left: $prefecture-card-margin;
     }
     .item:hover {
-        transform: scale(1.05);
+        transform: scale(1.08);
         box-shadow: -2px 2px 10px 2px rgba(0, 0, 0, 0.2);
     }
 }

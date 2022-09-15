@@ -12,7 +12,7 @@ import LayoutMain from '@/views/LayoutMain/index.vue'
 
 <style scoped lang="scss">
 .vite-layout {
-    padding-bottom: 50px;
+    // padding-bottom: 50px;
     min-width: 768px; /* px-to-viewport-ignore */
     background-color: rgba(100, 100, 100, 0.15);
     min-height: 100vh;

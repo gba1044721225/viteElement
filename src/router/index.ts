@@ -27,7 +27,29 @@ const routes: RouteRecordRaw[] = [
                     },
                     {
                         path: 'home',
-                        component: () => import('@/views/Home/index.vue')
+                        component: () => import('@/views/Home/index.vue'),
+                        children: [
+                            {
+                                path: '',
+                                redirect: '/layout/layout-main/home/news'
+                            },
+                            {
+                                path: 'news',
+                                component: () => import('@/views/Recommendation/News/index.vue')
+                            },
+                            {
+                                path: 'database',
+                                component: () => import('@/views/Recommendation/Database/index.vue')
+                            },
+                            {
+                                path: 'front-end',
+                                component: () => import('@/views/Recommendation/FrontEnd/index.vue')
+                            },
+                            {
+                                path: 'back-end',
+                                component: () => import('@/views/Recommendation/Backend/index.vue')
+                            }
+                        ]
                     }
                 ]
             }

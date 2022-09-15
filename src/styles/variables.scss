@@ -14,8 +14,12 @@ $hideSideBarWidth: 67px;
 $sideBarDuration: 0.28s;
 
 $pad-page: 80px;
-$head-height:50px;
-
+$head-height:80px;
+$tab-pad:20px;
+$prefecture-card-margin:15px;
+$prefecture-card-title-color:var(--el-color-primary);
+$prefecture-card-myfont-color:rgba(250, 250, 250, 1);
+$prefecture-card-myfont-color-active:rgba(250, 250, 250, .7);
 :export {
   menuText: $menuText;
   menuActiveText: $menuActiveText;

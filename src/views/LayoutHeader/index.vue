@@ -26,11 +26,13 @@ import CustomLoginAndRegist from '@/components/Header/LoginAndRegist/index.vue'
     right: 0;
     top: 0;
     z-index: 999;
+    width: 100%;
+    background-color: rgba(240, 240, 240, 0.7);
     .custom-menu {
         flex: 4;
     }
     .custom-input {
-        flex: 2;
+        flex: 1.5;
         margin-right: 30px;
     }
     .custom-login-and-regist {

@@ -7,10 +7,16 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    Article: typeof import('./components/Article/index.vue')['default']
+    ArticleLeft: typeof import('./components/ArticleLeft/index.vue')['default']
+    ArticleRight: typeof import('./components/ArticleRight/index.vue')['default']
     CardList: typeof import('./components/Card-list/index.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElCard: typeof import('element-plus/es')['ElCard']
+    ElCol: typeof import('element-plus/es')['ElCol']
     ElIcon: typeof import('element-plus/es')['ElIcon']
     ElInput: typeof import('element-plus/es')['ElInput']
+    ElRow: typeof import('element-plus/es')['ElRow']
     Input: typeof import('./components/Header/Input/index.vue')['default']
     LoginAndRegist: typeof import('./components/Header/LoginAndRegist/index.vue')['default']
     Menu: typeof import('./components/Header/Menu/index.vue')['default']

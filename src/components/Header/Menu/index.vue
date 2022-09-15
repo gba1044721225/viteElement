@@ -101,6 +101,7 @@ const changeTab = (item: Iitem) => {
         flex-wrap: nowrap;
         justify-content: center;
         align-items: center;
+        margin-right: 30px;
     }
 }
 </style>

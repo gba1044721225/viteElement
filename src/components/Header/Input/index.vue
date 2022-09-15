@@ -1,6 +1,11 @@
 <template>
     <div class="custom-input">
-        <el-input v-model="customInput" class="w-50 m-2" :suffix-icon="Search" />
+        <el-input
+            v-model="customInput"
+            placeholder="请输入搜索关键字"
+            class="w-50 m-2"
+            :suffix-icon="Search"
+        />
     </div>
 </template>
 

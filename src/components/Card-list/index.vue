@@ -37,21 +37,32 @@ const props = withDefaults(defineProps<Iprops>(), {
 })
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .card-list {
-    margin-top: 30px;
-    padding: 0 $pad-page;
+    margin-top: 20px;
+    box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.1);
     .title {
-        border-left: 2px solid rgb(30, 84, 209);
+        background-color: $prefecture-card-title-color;
+        padding: 15px 0;
+        // border-radius: 4px;
         display: flex;
         justify-content: space-between;
+        margin-bottom: 10px;
+        color: $prefecture-card-myfont-color;
+        h3 {
+            border-left: 3px solid $prefecture-card-myfont-color;
+            padding: 0 20px;
+            margin-left: 20px;
+        }
         .more {
             cursor: pointer;
             display: flex;
             align-items: center;
+            margin-right: 10px;
+            font-weight: bold;
         }
-        .content {
-            padding: 0 20px;
+        .more:hover {
+            color: $prefecture-card-myfont-color-active;
         }
     }
 }

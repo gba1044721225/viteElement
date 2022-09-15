@@ -100,7 +100,7 @@ export default ({ command, mode }) => {
                 plugins: [
                     postcsspxtoviewport({
                         unitToConvert: 'px', // 需要转换的单位，默认为"px"
-                        viewportWidth: 1024, // 设计稿的视窗宽度
+                        viewportWidth: 1920, // 设计稿的视窗宽度
                         unitPrecision: 5, // 单位转换后保留的精度
                         propList: ['*', '!font-size'], // 能转化为 vw 的属性列表 '!font-size'去除字体
                         viewportUnit: 'vw', // 希望使用的视窗单位
