@@ -52,7 +52,7 @@ const routeList = reactive([
 .recommendation {
     display: grid;
     grid-template-columns: calc((100% + $prefecture-card-margin) / 4 * 3 - $prefecture-card-margin) calc(
-            (100% + $prefecture-card-margin) / 4
+            (100% + $prefecture-card-margin) / 4 - $prefecture-card-margin
         );
     column-gap: $prefecture-card-margin;
     margin-top: 20px;
