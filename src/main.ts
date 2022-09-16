@@ -9,7 +9,7 @@ import router from '@/router'
 //     .request({
 //         method: 'POST',
 //         url: '/sys-user/create',
-//         data: JSON.stringify({
+//         data: {
 //             data: {
 //                 createTime: '2022-09-15T10:03:17.249Z',
 //                 email: 'string',
@@ -28,7 +28,7 @@ import router from '@/router'
 //                 serverity: 'string',
 //                 tocken: 'string'
 //             }
-//         })
+//         }
 //     })
 //     .then((res) => {
 //         console.log(res)

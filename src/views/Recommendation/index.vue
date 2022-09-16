@@ -20,8 +20,12 @@
             <router-view></router-view>
         </div>
         <div class="grid-right">
-            <div class="title-right">热门文章</div>
-            <article-right></article-right>
+            <div class="title-right">
+                <el-button type="primary" plain link>热门文章</el-button>
+            </div>
+            <el-card :body-style="{ padding: '10px' }" v-for="i in 10" :key="i">
+                <article-right></article-right>
+            </el-card>
         </div>
     </div>
 </template>
@@ -72,8 +76,13 @@ const routeList = reactive([
     .grid-right {
         .title-right {
             box-sizing: border-box;
-            // padding: $tab-pad;
+            padding: $tab-pad;
             background-color: $prefecture-card-title-color;
+            font-size: 14px;
+            color: $prefecture-card-myfont-color;
+            .el-button {
+                color: $prefecture-card-myfont-color;
+            }
         }
     }
 }

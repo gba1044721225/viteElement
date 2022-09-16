@@ -54,6 +54,10 @@ const routes: RouteRecordRaw[] = [
                 ]
             }
         ]
+    },
+    {
+        path: '/test',
+        component: () => import('@/views/EditorLjc/index.vue')
     }
 ]
 

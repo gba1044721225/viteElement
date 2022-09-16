@@ -15,12 +15,13 @@
                     即用户界面设计，指的是对于所有软件的界面美观、操作逻辑、人机交互的整体设计。或许对于现在市场上很多UI设计师来说
                 </span>
             </div>
-            <did class="third-line">
+            <div class="third-line">
                 <div class="left">
                     <el-icon><User /></el-icon>
                     <span>小黑黑</span>
                     <span>设计教程</span>
                 </div>
+
                 <div class="right">
                     <div class="icon-font">
                         <img src="@/assets/testimg/like.png" alt="" />
@@ -35,7 +36,7 @@
                         <span>3333</span>
                     </div>
                 </div>
-            </did>
+            </div>
         </div>
     </div>
 </template>
