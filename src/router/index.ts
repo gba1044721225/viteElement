@@ -35,21 +35,32 @@ const routes: RouteRecordRaw[] = [
                             },
                             {
                                 path: 'news',
-                                component: () => import('@/views/Recommendation/News/index.vue')
+                                component: () =>
+                                    import('@/views/Home/Recommendation/News/index.vue')
                             },
                             {
                                 path: 'database',
-                                component: () => import('@/views/Recommendation/Database/index.vue')
+                                component: () =>
+                                    import('@/views/Home/Recommendation/Database/index.vue')
                             },
                             {
                                 path: 'front-end',
-                                component: () => import('@/views/Recommendation/FrontEnd/index.vue')
+                                component: () =>
+                                    import('@/views/Home/Recommendation/FrontEnd/index.vue')
                             },
                             {
                                 path: 'back-end',
-                                component: () => import('@/views/Recommendation/Backend/index.vue')
+                                component: () =>
+                                    import('@/views/Home/Recommendation/Backend/index.vue')
                             }
                         ]
+                    },
+                    {
+                        path: 'Category',
+                        component: () => import('@/views/Category/index.vue'),
+                        meta: {
+                            title: '分类'
+                        }
                     }
                 ]
             }

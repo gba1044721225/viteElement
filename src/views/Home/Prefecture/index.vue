@@ -35,27 +35,27 @@ const specialCard = reactive({
     title: '特色专题',
     list: [
         {
-            url: new URL('../../assets/testimg/4.jpeg', import.meta.url).href,
+            url: new URL('../../../assets/testimg/4.jpeg', import.meta.url).href,
             id: 101,
             text: '科技最前沿'
         },
         {
-            url: new URL('../../assets/testimg/4.jpeg', import.meta.url).href,
+            url: new URL('../../../assets/testimg/4.jpeg', import.meta.url).href,
             id: 102,
             text: '科技最前沿'
         },
         {
-            url: new URL('../../assets/testimg/4.jpeg', import.meta.url).href,
+            url: new URL('../../../assets/testimg/4.jpeg', import.meta.url).href,
             id: 103,
             text: '科技最前沿'
         },
         {
-            url: new URL('../../assets/testimg/4.jpeg', import.meta.url).href,
+            url: new URL('../../../assets/testimg/4.jpeg', import.meta.url).href,
             id: 104,
             text: '科技最前沿'
         },
         {
-            url: new URL('../../assets/testimg/4.jpeg', import.meta.url).href,
+            url: new URL('../../../assets/testimg/4.jpeg', import.meta.url).href,
             id: 104,
             text: '科技最前沿'
         }
@@ -66,19 +66,19 @@ const toolCard = reactive({
     title: '工具',
     list: [
         {
-            url: new URL('../../assets/testimg/5.jpeg', import.meta.url).href,
+            url: new URL('../../../assets/testimg/5.jpeg', import.meta.url).href,
             id: 101
         },
         {
-            url: new URL('../../assets/testimg/5.jpeg', import.meta.url).href,
+            url: new URL('../../../assets/testimg/5.jpeg', import.meta.url).href,
             id: 102
         },
         {
-            url: new URL('../../assets/testimg/5.jpeg', import.meta.url).href,
+            url: new URL('../../../assets/testimg/5.jpeg', import.meta.url).href,
             id: 103
         },
         {
-            url: new URL('../../assets/testimg/5.jpeg', import.meta.url).href,
+            url: new URL('../../../assets/testimg/5.jpeg', import.meta.url).href,
             id: 104
         }
     ]
@@ -87,7 +87,7 @@ const toolCard = reactive({
 
 <style lang="scss">
 .prefecture {
-    --radius: 2px;
+    --radius: 4px;
     // h3 {
     //     padding: 0 20px;
     // }

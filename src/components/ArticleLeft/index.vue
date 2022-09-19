@@ -3,37 +3,36 @@
         <img src="@/assets/testimg/6.jpeg" alt="" />
         <div class="content">
             <div class="first-line">
-                <div class="title">新手自学UI设计，这几点是你必须要清楚的！</div>
+                <div class="title">{{ article.title }}</div>
                 <div class="time">
                     <el-icon><Clock /></el-icon>
-                    <span>07-07 12:00</span>
+                    <span>{{ article.time }}</span>
                 </div>
             </div>
             <div class="second-line">
-                <span
-                    >UI只是一个简称，全称是User Interface
-                    即用户界面设计，指的是对于所有软件的界面美观、操作逻辑、人机交互的整体设计。或许对于现在市场上很多UI设计师来说
+                <span>
+                    {{ article.content }}
                 </span>
             </div>
             <div class="third-line">
                 <div class="left">
                     <el-icon><User /></el-icon>
-                    <span>小黑黑</span>
-                    <span>设计教程</span>
+                    <span>{{ article.usrname }}</span>
+                    <span>{{ article.artType }}</span>
                 </div>
 
                 <div class="right">
                     <div class="icon-font">
                         <img src="@/assets/testimg/like.png" alt="" />
-                        <span>7777</span>
+                        <span>{{ article.like }}</span>
                     </div>
                     <div class="icon-font">
                         <img src="@/assets/testimg/reply.png" alt="" />
-                        <span>5555</span>
+                        <span>{{ article.chat }}</span>
                     </div>
                     <div class="icon-font">
                         <img src="@/assets/testimg/eye.png" alt="" />
-                        <span>3333</span>
+                        <span>{{ article.see }}</span>
                     </div>
                 </div>
             </div>
@@ -41,7 +40,28 @@
     </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+interface Iprops {
+    article?: {
+        [index: string]: string | number
+    }
+}
+const props = withDefaults(defineProps<Iprops>(), {
+    article() {
+        return {
+            title: '新手自学UI设计，这几点是你必须要清楚的！',
+            time: '07-07 12:00',
+            content:
+                'UI只是一个简称，全称是User Interface即用户界面设计，指的是对于所有软件的界面美观、操作逻辑、人机交互的整体设计。或许对于现在市场上很多UI设计师来说',
+            usrname: '小黑黑',
+            artType: '设计教程',
+            like: 7777,
+            chat: 5555,
+            see: 333
+        }
+    }
+})
+</script>
 
 <style scoped lang="scss">
 .article {
@@ -50,6 +70,7 @@
         width: 250px;
         height: 250px;
         margin-right: 15px;
+        border-radius: 4px;
     }
     .content {
         overflow: auto;

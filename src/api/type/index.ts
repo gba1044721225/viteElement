@@ -8,7 +8,7 @@ import type {
 interface InterceptorsConfig {
     reqFn?: (value: AxiosRequestConfig) => AxiosRequestConfig | Promise<AxiosRequestConfig>
     reqRejFn?: (error: any) => any
-    resFn?: (value: AxiosResponse) => AxiosResponse | Promise<AxiosResponse>
+    resFn?: <T = AxiosResponse>(value: T) => T | Promise<T>
     resRejFn?: (error: any) => any
 }
 

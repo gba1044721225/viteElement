@@ -4,13 +4,32 @@
             <h3>1</h3>
         </div>
         <div class="right">
-            <div class="title">内容标题文字</div>
-            <div class="text">这里是一行内容描述文字</div>
+            <div class="title">{{ article.title }}</div>
+            <div class="text">{{ article.text }}</div>
         </div>
     </div>
 </template>
 
-<script setup></script>
+<script setup lang="ts">
+import { ar } from 'element-plus/es/locale'
+
+interface Iprops {
+    article?: {
+        title: string
+        text: string
+    }
+    index?: number
+}
+const props = withDefaults(defineProps<Iprops>(), {
+    index: 1,
+    article() {
+        return {
+            title: '内容标题文字',
+            text: '这里是一行内容描述文字'
+        }
+    }
+})
+</script>
 
 <style lang="scss" scoped>
 .article-right {

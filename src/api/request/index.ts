@@ -1,3 +1,4 @@
+import { rejects } from 'assert'
 import axios from 'axios'
 import { AxiosRequestConfig, AxiosInstance, InterceptorsConfig, HyConfig } from '../type'
 
@@ -20,7 +21,19 @@ export class RequestHy {
             this.interceptorsFn?.resRejFn
         )
     }
-    async request<T>(config: AxiosRequestConfig): Promise<T> {
-        return await this.instance.request<any, T>(config)
+
+    request<T>(config: HyConfig): Promise<T> {
+        // console.log(22222)
+        return new Promise((resolve, rejects) => {
+            if (config.interceptorsFn?.reqFn) {
+                config = config.interceptorsFn.reqFn(config) as AxiosRequestConfig<any>
+            }
+            this.instance.request<any, T>(config).then((res) => {
+                if (config.interceptorsFn?.resFn) {
+                    res = config.interceptorsFn.resFn(res) as T
+                }
+                resolve(res)
+            })
+        })
     }
 }
