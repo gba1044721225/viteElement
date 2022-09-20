@@ -1,5 +1,5 @@
 <template>
-    <div>分类</div>
+    <div>分享</div>
 </template>
 
 <script setup lang="ts"></script>

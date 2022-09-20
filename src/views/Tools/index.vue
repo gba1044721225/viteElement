@@ -1,5 +1,5 @@
 <template>
-    <div>分类</div>
+    <div>工具</div>
 </template>
 
 <script setup lang="ts"></script>

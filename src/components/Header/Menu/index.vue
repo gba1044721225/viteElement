@@ -8,8 +8,8 @@
             class="tab-item"
             v-for="item in tabList"
             :key="item.id"
-            @click="changeTab(item)"
-            :class="{ isActivted: item.id == currentId }"
+            @click="changeTab(item.id)"
+            :class="{ isActivted: currentId == item.id }"
         >
             <div class="label">
                 {{ item.label }}
@@ -19,54 +19,21 @@
 </template>
 
 <script setup lang="ts">
-import type { Ref } from 'vue'
-interface Iitem {
-    isActive: boolean
-    id: string
-    label: string
-}
-interface Iprops {
-    tabList?: Iitem[]
-}
-const props = withDefaults(defineProps<Iprops>(), {
-    tabList: () => [
-        {
-            isActive: false,
-            id: 'home',
-            label: '首页'
-        },
-        {
-            isActive: false,
-            id: 'category',
-            label: '分类'
-        },
-        {
-            isActive: false,
-            id: 'theme',
-            label: '主题'
-        },
-        {
-            isActive: false,
-            id: 'tool',
-            label: '工具'
-        },
-        {
-            isActive: false,
-            id: 'message',
-            label: '留言'
-        },
-        {
-            isActive: false,
-            id: 'sharing',
-            label: '分享'
-        }
-    ]
-})
-
-const currentId: Ref<string> = ref(props.tabList[0].id)
-
-const changeTab = (item: Iitem) => {
-    currentId.value = item.id
+import { ref } from 'vue'
+import { useTabStore } from '@/store'
+import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
+const store = useTabStore()
+const router = useRouter()
+const { tabList } = storeToRefs(store)
+const currentId = ref<string>('home')
+const changeTab = (id: string) => {
+    // currentId.value = item.id
+    console.log(tabList)
+    currentId.value = id
+    router.push({
+        path: `/layout/layout-main/${id}`
+    })
 }
 </script>
 

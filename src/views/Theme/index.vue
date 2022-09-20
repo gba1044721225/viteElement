@@ -1,5 +1,5 @@
 <template>
-    <div>分类</div>
+    <div>主题</div>
 </template>
 
 <script setup lang="ts"></script>

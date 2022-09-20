@@ -17,9 +17,6 @@ const routes: RouteRecordRaw[] = [
             {
                 path: 'layout-main',
                 component: () => import('@/views/LayoutMain/index.vue'),
-                meta: {
-                    title: '首页'
-                },
                 children: [
                     {
                         path: '',
@@ -28,6 +25,9 @@ const routes: RouteRecordRaw[] = [
                     {
                         path: 'home',
                         component: () => import('@/views/Home/index.vue'),
+                        meta: {
+                            title: '首页'
+                        },
                         children: [
                             {
                                 path: '',
@@ -61,10 +61,45 @@ const routes: RouteRecordRaw[] = [
                         meta: {
                             title: '分类'
                         }
+                    },
+                    {
+                        path: 'theme',
+                        component: () => import('@/views/Theme/index.vue'),
+                        meta: {
+                            title: '主题'
+                        }
+                    },
+                    {
+                        path: 'tools',
+                        component: () => import('@/views/Tools/index.vue'),
+                        meta: {
+                            title: '工具'
+                        }
+                    },
+                    {
+                        path: 'message',
+                        component: () => import('@/views/Message/index.vue'),
+                        meta: {
+                            title: '留言'
+                        }
+                    },
+                    {
+                        path: 'sharing',
+                        component: () => import('@/views/Sharing/index.vue'),
+                        meta: {
+                            title: '分享'
+                        }
                     }
                 ]
             }
         ]
+    },
+    {
+        path: '/login',
+        component: () => import('@/Admin/index.vue'),
+        meta: {
+            title: '登录/注册'
+        }
     },
     {
         path: '/test',
