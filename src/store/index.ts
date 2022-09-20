@@ -41,7 +41,8 @@ export const useLoginStore = defineStore('headerLogin', {
     state: () => ({
         token: '',
         usrName: '',
-        usrPwd: ''
+        usrPwd: '',
+        from: ''
     }),
     actions: {}
 })

@@ -8,25 +8,28 @@
                 <img class="form__icon" src=" " />
             </div>
             <span class="form__span">或使用电子邮件进行注册</span>
-            <input class="form__input" type="text" placeholder="Name" />
-            <input class="form__input" type="text" placeholder="Email" />
-            <input class="form__input" type="password" placeholder="Password" />
-            <button class="form__button button submit">SIGN UP</button>
+            <input class="form__input" type="text" placeholder="账号" />
+            <input class="form__input" type="text" placeholder="邮件" />
+            <input class="form__input" type="password" placeholder="密码" />
+            <button class="form__button button submit">注册</button>
         </form>
     </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import useEmitter from '@/utils/mitter.js'
 
 const emitter = useEmitter()
 onMounted(() => {
     emitter.on('change', (isOpen: boolean) => {
         console.log(isOpen)
+        const bContainer = document.querySelector('#a-container') as any
         if (isOpen) {
-            const bContainer = document.querySelector('#a-container') as any
-            bContainer.classList.toggle('is-txl')
-            bContainer.classList.toggle('is-z200')
+            bContainer.classList.add('is-txl')
+            bContainer.classList.remove('is-z200')
+        } else {
+            bContainer.classList.remove('is-txl')
+            bContainer.classList.add('is-z200')
         }
     })
 })

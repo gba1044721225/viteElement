@@ -18,12 +18,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick } from 'vue'
+import { ref, nextTick, onMounted } from 'vue'
 import useEmitter from '@/utils/mitter'
-
-const sidebarOpen = ref(true)
+import { useLoginStore } from '@/store/index'
+const sidebarOpen = ref(false)
 const emitter = useEmitter()
-
+const store = useLoginStore()
 const change = () => {
     const switchC1 = document.querySelector('#switch-c1') as any
     const switchC2 = document.querySelector('#switch-c2') as any
@@ -41,6 +41,19 @@ const change = () => {
     switchC1.classList.toggle('is-hidden')
     switchC2.classList.toggle('is-hidden')
 }
+
+onMounted(() => {
+    console.log(store.from)
+    console.log(store.from)
+    if (store.from === 'regist') {
+        return
+    }
+    if (store.from === 'login') {
+        nextTick(() => {
+            change()
+        })
+    }
+})
 </script>
 
 <style scoped lang="scss">

@@ -7,13 +7,21 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { useLoginStore } from '@/store/index'
 const router = useRouter()
+const store = useLoginStore()
 const linkToLogin = () => {
+    store.$patch({
+        from: 'login'
+    })
     router.push({
         path: '/login'
     })
 }
 const linkToRegist = () => {
+    store.$patch({
+        from: 'regist'
+    })
     router.push({
         path: '/login'
     })

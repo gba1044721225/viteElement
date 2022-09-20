@@ -95,7 +95,7 @@ const routes: RouteRecordRaw[] = [
         ]
     },
     {
-        path: '/login',
+        path: '/login/:id(\\W*|\\w*)*',
         component: () => import('@/Admin/index.vue'),
         meta: {
             title: '登录/注册'
