@@ -38,11 +38,38 @@ export const useTabStore = defineStore('headerTab', {
 })
 
 export const useLoginStore = defineStore('headerLogin', {
-    state: () => ({
-        token: '',
-        usrName: '',
-        usrPwd: '',
-        from: ''
-    }),
-    actions: {}
+    state: () => {
+        function getRandomKey() {
+            const keyPool = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
+            const keyNum = 8
+            let text = ''
+            for (let i = 0; i < keyNum; i++) {
+                text += keyPool[Math.floor(Math.random() * 62)]
+            }
+            // console.log(text)
+            return text
+        }
+        return {
+            token: '',
+            usrName: '',
+            usrPwd: '',
+            from: '',
+            key: getRandomKey()
+        }
+    },
+    getters: {},
+    actions: {
+        actGetRandomKey() {
+            // console.log(1111111)
+            const keyPool = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
+            const keyNum = 8
+            let text = ''
+            for (let i = 0; i < keyNum; i++) {
+                text += keyPool[Math.floor(Math.random() * 62)]
+            }
+            // console.log(text)
+            this.key = text
+            // console.log(this.key)
+        }
+    }
 })

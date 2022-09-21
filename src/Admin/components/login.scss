@@ -38,7 +38,7 @@ $transition: 1.25s;
     width: 1000px;
     min-width: 1000px;
     min-height: 600px;
-    height: 600px;
+    height: 800px;
     padding: 25px;
     background-color: $neu-1;
     box-shadow: 10px 10px 10px $neu-2, -10px -10px 10px $white;
@@ -114,6 +114,28 @@ $transition: 1.25s;
             box-shadow: inset 4px 4px 4px $neu-2, inset -4px -4px 4px $white;
         }
     }
+    .code-input{
+        position: relative;
+        z-index: 200;
+        .el-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 0;
+            font-size: 12px;
+            padding: 5px 10px;
+        }
+        img{
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 0;
+            height:36px;
+            border-radius: 8px;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+    }
     &__span {
         margin-top: 30px;
         margin-bottom: 12px;
@@ -186,8 +208,10 @@ $transition: 1.25s;
 
     &__circle {
         position: absolute;
-        width: 500px;
-        height: 500px;
+        // width: 500px;
+        // height: 500px;
+        width: 600px;
+        height: 600px;
         border-radius: 50%;
         background-color: $neu-1;
         box-shadow: inset 8px 8px 12px $neu-2, inset -8px -8px 12px $white;
@@ -199,8 +223,10 @@ $transition: 1.25s;
         &--t {
             top: -30%;
             left: 60%;
-            width: 300px;
-            height: 300px;
+            // width: 300px;
+            // height: 300px;
+            width: 400px;
+            height: 400px;
         }
     }
 
