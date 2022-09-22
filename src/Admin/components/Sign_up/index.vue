@@ -116,8 +116,8 @@ const getRegist = () => {
                     customClass: 'el-custom-fail',
                     offset: 40
                 })
-                store.actGetRandomKey()
-                getCode()
+                // store.actGetRandomKey()
+                // getCode()
             }
         })
 }

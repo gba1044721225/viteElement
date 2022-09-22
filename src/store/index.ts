@@ -1,4 +1,16 @@
 import { defineStore } from 'pinia'
+import { myReq } from '@/api/instanceReq/index'
+import type { Idata } from '@/api/type/index'
+interface Icode {
+    data: any
+    meta: {
+        code?: string | number
+        description?: string
+        from?: string
+        serverity?: string
+        tocken?: string
+    }
+}
 export const useTabStore = defineStore('headerTab', {
     // other options...
     state: () => ({
@@ -75,6 +87,17 @@ export const useLoginStore = defineStore('headerLogin', {
             // console.log(text)
             this.key = text
             // console.log(this.key)
+        },
+        async getCode() {
+            // return myReq.request<Idata<Icode>>({
+            //     method: 'GET',
+            //     url: 'sys-user/randomImage/' + this.key
+            // })
+            return new Promise<string>((resolve) => {
+                setTimeout(() => {
+                    resolve('100')
+                }, 4000)
+            })
         }
     }
 })

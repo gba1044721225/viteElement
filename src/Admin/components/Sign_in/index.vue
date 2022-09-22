@@ -27,6 +27,7 @@
             </div>
             <a class="form__link">忘记密码了吗?</a>
             <button class="form__button button submit" @click="reqLogin">登录</button>
+            <el-button @click="getCode">测试</el-button>
         </div>
     </div>
 </template>
@@ -59,8 +60,25 @@ interface ILogin {
         tocken?: string
     }
 }
+interface Props {
+    img: string
+}
+const props = withDefaults(defineProps<Props>(), {
+    img: ''
+})
+const emit = defineEmits<{
+    (e: 'update:img', id: string): void
+}>()
 const store = useLoginStore()
-const imgSrc = ref('')
+const imgSrc = computed({
+    get() {
+        return props.img
+    },
+    set(val) {
+        emit('update:img', val)
+    }
+})
+// console.log(imgSrc)
 const loginData = reactive({
     password: '',
     phone: '',
@@ -69,15 +87,16 @@ const loginData = reactive({
 })
 const router = useRouter()
 const getCode = () => {
-    myReq
-        .request<Idata<Icode>>({
-            method: 'GET',
-            url: 'sys-user/randomImage/' + store.key
-        })
-        .then((res) => {
-            // console.log(res.data.data)
-            imgSrc.value = res.data.data
-        })
+    imgSrc.value = '5000'
+    // myReq
+    //     .request<Idata<Icode>>({
+    //         method: 'GET',
+    //         url: 'sys-user/randomImage/' + store.key
+    //     })
+    //     .then((res) => {
+    //         // console.log(res.data.data)
+    //         imgSrc.value = res.data.data
+    //     })
 }
 const reqLogin = () => {
     myReq
@@ -114,13 +133,13 @@ const reqLogin = () => {
                     customClass: 'el-custom-fail',
                     offset: 40
                 })
-                store.actGetRandomKey()
+                // store.actGetRandomKey()
             }
         })
 }
 
 const initLoginData = () => {
-    store.actGetRandomKey()
+    // store.actGetRandomKey()
     if (store.signUpCode === 200) {
         loginData.phone = store.signUp.phone
         loginData.password = store.signUp.password
@@ -140,21 +159,17 @@ onMounted(() => {
             }
         }
     })
-    const bContainer = document.querySelector('#b-container') as any
 
     emitter.on('change', (isOpen: boolean) => {
         // console.log(isOpen)
+        const bContainer = document.querySelector('#b-container') as any
         if (!isOpen) {
             bContainer.classList.remove('is-txl')
             bContainer.classList.remove('is-z200')
         } else {
-            // getCode()
             bContainer.classList.add('is-txl')
             bContainer.classList.add('is-z200')
         }
-    })
-    nextTick(() => {
-        console.log('up', bContainer.classList.contains('is-z200'))
     })
 })
 </script>
