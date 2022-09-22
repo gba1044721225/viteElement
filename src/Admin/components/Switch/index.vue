@@ -19,10 +19,9 @@
 
 <script setup lang="ts">
 import { ref, nextTick, onMounted } from 'vue'
-import useEmitter from '@/utils/mitter'
+import emitter from '@/utils/mitter'
 import { useLoginStore } from '@/store/index'
 const sidebarOpen = ref(false)
-const emitter = useEmitter()
 const store = useLoginStore()
 const change = () => {
     const switchC1 = document.querySelector('#switch-c1') as any
@@ -43,8 +42,15 @@ const change = () => {
 }
 
 onMounted(() => {
-    console.log(store.from)
-    console.log(store.from)
+    // console.log(store.from)
+    emitter.on('registSucc', ({ code }) => {
+        console.log('开启')
+        console.log('registSucc', code)
+        if (code === 200) {
+            change()
+        }
+    })
+
     if (store.from === 'regist') {
         return
     }

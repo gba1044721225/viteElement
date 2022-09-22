@@ -7,6 +7,7 @@ import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import { loadEnv } from 'vite'
 import postcsspxtoviewport from 'postcss-px-to-viewport'
+import vueSetupExtend from 'vite-plugin-vue-setup-extend'
 import path from 'path'
 // 路径
 const pathSrc = path.resolve(__dirname, 'src')
@@ -18,6 +19,7 @@ export default ({ command, mode }) => {
     return defineConfig({
         plugins: [
             vue(),
+            vueSetupExtend(),
             AutoImport({
                 // Auto import functions from Vue, e.g. ref, reactive, toRef...
                 // 自动导入 Vue 相关函数，如：ref, reactive, toRef 等

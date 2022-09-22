@@ -1,7 +1,7 @@
 <template>
     <div class="vite-app">
         <router-view v-slot="{ Component }">
-            <keep-alive>
+            <keep-alive exclude="Login">
                 <component :is="Component"></component>
             </keep-alive>
         </router-view>

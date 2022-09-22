@@ -1,8 +1,15 @@
-// src/hooks/useEmitter.js
-import { getCurrentInstance } from 'vue'
+import mitt, { EventHandlerMap } from 'mitt'
+type ArgType = any
 
-export default function useEmitter() {
-    const internalInstance = getCurrentInstance()
-    const emitter = internalInstance!.appContext.config.globalProperties.emitter
-    return emitter
+type Emits<EventType extends string | symbol, T> = {
+    on(type: EventType, handler: (arg: T) => void): void
+    off(type: EventType, handler: (arg: T) => void): void
+    emit(type: EventType, arg: T): void
+    all: EventHandlerMap<any>
 }
+
+type Emitter = Emits<string, ArgType>
+
+const emitter: Emitter = mitt<Emitter>()
+// console.log(emitter)
+export default emitter

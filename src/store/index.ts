@@ -50,9 +50,14 @@ export const useLoginStore = defineStore('headerLogin', {
             return text
         }
         return {
+            signUp: {
+                name: '',
+                phone: '',
+                email: '',
+                password: ''
+            },
+            signUpCode: 500,
             token: '',
-            usrName: '',
-            usrPwd: '',
             from: '',
             key: getRandomKey()
         }

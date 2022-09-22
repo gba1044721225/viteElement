@@ -17,6 +17,7 @@
     "pinia": "^2.0.22",
     "swiper": "^8.3.2",
     "unplugin-icons": "^0.14.9",
+    "vite-plugin-vue-setup-extend": "^0.4.0",
     "vue": "^3.2.37",
     "vue-router": "^4.0.13"
   },

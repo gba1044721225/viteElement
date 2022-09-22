@@ -32,24 +32,12 @@
     </div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import useEmitter from '@/utils/mitter.js'
+import { onMounted, ref, watch } from 'vue'
+import emitter from '@/utils/mitter.js'
 import { useLoginStore } from '@/store/index'
 import { myReq } from '@/api/instanceReq/index'
 import type { Idata } from '@/api/type/index'
 
-const emitter = useEmitter()
-const store = useLoginStore()
-const imgSrc = ref('')
-const registData = reactive({
-    code: '',
-    email: '',
-    imgId: 0,
-    key: '',
-    name: '',
-    password: '',
-    phone: ''
-})
 interface Icode {
     data: any
     meta: {
@@ -70,6 +58,17 @@ interface IRegist {
         tocken?: string
     }
 }
+const store = useLoginStore()
+const imgSrc = ref('')
+const registData = reactive({
+    code: '',
+    email: '',
+    imgId: 0,
+    key: '',
+    name: '',
+    password: '',
+    phone: ''
+})
 const getCode = () => {
     myReq
         .request<Idata<Icode>>({
@@ -100,14 +99,16 @@ const getRegist = () => {
             }
         })
         .then((res) => {
-            // console.log(res)
-            if (res.data.meta.code === 200) {
+            console.log(res.data)
+            if (res.data.meta.code === '200') {
                 ElMessage({
-                    message: '注册成功',
+                    message: res.data.meta.description,
                     grouping: true,
                     customClass: 'el-custom-succ',
                     offset: 40
                 })
+                store.signUpCode = 200
+                emitter.emit('registSucc', { code: 200 })
             } else {
                 ElMessage({
                     message: res.data.meta.description,
@@ -115,20 +116,44 @@ const getRegist = () => {
                     customClass: 'el-custom-fail',
                     offset: 40
                 })
-                getCode()
                 store.actGetRandomKey()
+                getCode()
             }
         })
 }
+
+const initRegistData = () => {
+    registData.name = store.signUp.name
+    registData.phone = store.signUp.phone
+    registData.email = store.signUp.email
+    registData.password = store.signUp.password
+    store.signUpCode = 500
+}
+
+watch(
+    () => ({ ...registData }),
+    (nw) => {
+        // console.log('nw', nw)
+        store.signUp = {
+            name: nw.name,
+            phone: nw.phone,
+            email: nw.email,
+            password: nw.password
+        }
+    }
+)
+
 onMounted(() => {
-    getCode()
+    initRegistData()
+
     emitter.on('change', (isOpen: boolean) => {
-        console.log(isOpen)
+        // console.log(isOpen, '111111')
         const bContainer = document.querySelector('#a-container') as any
         if (isOpen) {
             bContainer.classList.add('is-txl')
             bContainer.classList.remove('is-z200')
         } else {
+            // getCode()
             bContainer.classList.remove('is-txl')
             bContainer.classList.add('is-z200')
         }
