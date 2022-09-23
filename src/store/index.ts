@@ -51,16 +51,6 @@ export const useTabStore = defineStore('headerTab', {
 
 export const useLoginStore = defineStore('headerLogin', {
     state: () => {
-        function getRandomKey() {
-            const keyPool = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
-            const keyNum = 8
-            let text = ''
-            for (let i = 0; i < keyNum; i++) {
-                text += keyPool[Math.floor(Math.random() * 62)]
-            }
-            // console.log(text)
-            return text
-        }
         return {
             signUp: {
                 name: '',
@@ -71,7 +61,7 @@ export const useLoginStore = defineStore('headerLogin', {
             signUpCode: 500,
             token: '',
             from: '',
-            key: getRandomKey()
+            key: ''
         }
     },
     getters: {},
@@ -89,14 +79,9 @@ export const useLoginStore = defineStore('headerLogin', {
             // console.log(this.key)
         },
         async getCode() {
-            // return myReq.request<Idata<Icode>>({
-            //     method: 'GET',
-            //     url: 'sys-user/randomImage/' + this.key
-            // })
-            return new Promise<string>((resolve) => {
-                setTimeout(() => {
-                    resolve('100')
-                }, 4000)
+            return myReq.request<Idata<Icode>>({
+                method: 'GET',
+                url: 'sys-user/randomImage/' + this.key
             })
         }
     }

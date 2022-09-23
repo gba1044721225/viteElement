@@ -1,6 +1,6 @@
 <template>
     <div class="container a-container" id="a-container">
-        <div class="form" id="a-form" method="" action="">
+        <form class="form" id="a-form">
             <h2 class="form_title title">创建账户</h2>
             <div class="form__icons">
                 <img class="form__icon" src=" " />
@@ -16,6 +16,7 @@
                 class="form__input"
                 v-model="registData.password"
                 type="password"
+                autocomplete="off"
                 placeholder="密码"
             />
             <div class="code-input">
@@ -27,8 +28,8 @@
                 />
                 <img @click="getCode" :src="imgSrc" alt="" />
             </div>
-            <button class="form__button button submit" @click="getRegist">注册</button>
-        </div>
+            <button class="form__button button submit" @click.stop.prevent="getRegist">注册</button>
+        </form>
     </div>
 </template>
 <script setup lang="ts">
@@ -36,6 +37,7 @@ import { onMounted, ref, watch } from 'vue'
 import emitter from '@/utils/mitter.js'
 import { useLoginStore } from '@/store/index'
 import { myReq } from '@/api/instanceReq/index'
+import { verifyPhone, verifyName, verifyPassword, verifyEmail } from '@/utils/verify'
 import type { Idata } from '@/api/type/index'
 
 interface Icode {
@@ -58,8 +60,24 @@ interface IRegist {
         tocken?: string
     }
 }
+interface Props {
+    img: string
+}
+const props = withDefaults(defineProps<Props>(), {
+    img: ''
+})
+const emit = defineEmits<{
+    (e: 'update:img', id: string): void
+}>()
 const store = useLoginStore()
-const imgSrc = ref('')
+const imgSrc = computed({
+    get() {
+        return props.img
+    },
+    set(val) {
+        emit('update:img', val)
+    }
+})
 const registData = reactive({
     code: '',
     email: '',
@@ -81,6 +99,38 @@ const getCode = () => {
         })
 }
 const getRegist = () => {
+    if (!verifyName(registData.name)) {
+        ElMessage({
+            message: '用户名格式不对',
+            type: 'warning'
+        })
+        return
+    }
+
+    if (!verifyPhone(registData.phone)) {
+        ElMessage({
+            message: '手机号码格式不对',
+            type: 'warning'
+        })
+        return
+    }
+
+    if (!verifyEmail(registData.email)) {
+        ElMessage({
+            message: '邮箱格式不对',
+            type: 'warning'
+        })
+        return
+    }
+
+    if (!verifyPassword(registData.password)) {
+        ElMessage({
+            message: '密码格式不对',
+            type: 'warning'
+        })
+        return
+    }
+
     const data = {
         ...registData,
         key: store.key
@@ -109,6 +159,7 @@ const getRegist = () => {
                 })
                 store.signUpCode = 200
                 emitter.emit('registSucc', { code: 200 })
+                getCode()
             } else {
                 ElMessage({
                     message: res.data.meta.description,
@@ -116,8 +167,6 @@ const getRegist = () => {
                     customClass: 'el-custom-fail',
                     offset: 40
                 })
-                // store.actGetRandomKey()
-                // getCode()
             }
         })
 }

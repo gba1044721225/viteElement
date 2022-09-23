@@ -1,6 +1,6 @@
 <template>
     <div class="container b-container" id="b-container">
-        <div class="form" id="b-form" method="" action="">
+        <form class="form" id="b-form">
             <h2 class="form_title title">登录网站</h2>
             <div class="form__icons">
                 <img class="form__icon" src=" " />
@@ -14,6 +14,7 @@
                 class="form__input"
                 v-model="loginData.password"
                 type="password"
+                autocomplete="off"
                 placeholder="密码"
             />
             <div class="code-input">
@@ -26,9 +27,9 @@
                 <img @click="getCode" :src="imgSrc" alt="" />
             </div>
             <a class="form__link">忘记密码了吗?</a>
-            <button class="form__button button submit" @click="reqLogin">登录</button>
-            <el-button @click="getCode">测试</el-button>
-        </div>
+            <button class="form__button button submit" @click.stop.prevent="reqLogin">登录</button>
+            <!-- <el-button @click="getCode">测试</el-button> -->
+        </form>
     </div>
 </template>
 
@@ -36,9 +37,9 @@
 import { reactive, onMounted, ref } from 'vue'
 import emitter from '@/utils/mitter'
 import { myReq } from '@/api/instanceReq/index'
-
 import { useLoginStore } from '@/store/index'
 import { useRouter } from 'vue-router'
+import { verifyPhone, verifyName, verifyPassword } from '@/utils/verify'
 import type { Idata } from '@/api/type/index'
 interface Icode {
     data: any
@@ -70,6 +71,7 @@ const emit = defineEmits<{
     (e: 'update:img', id: string): void
 }>()
 const store = useLoginStore()
+const router = useRouter()
 const imgSrc = computed({
     get() {
         return props.img
@@ -85,20 +87,34 @@ const loginData = reactive({
     verifyCode: '',
     verifyType: 'P'
 })
-const router = useRouter()
 const getCode = () => {
-    imgSrc.value = '5000'
-    // myReq
-    //     .request<Idata<Icode>>({
-    //         method: 'GET',
-    //         url: 'sys-user/randomImage/' + store.key
-    //     })
-    //     .then((res) => {
-    //         // console.log(res.data.data)
-    //         imgSrc.value = res.data.data
-    //     })
+    myReq
+        .request<Idata<Icode>>({
+            method: 'GET',
+            url: 'sys-user/randomImage/' + store.key
+        })
+        .then((res) => {
+            console.log(res.data.data)
+            imgSrc.value = res.data.data
+        })
 }
 const reqLogin = () => {
+    if (!verifyPhone(loginData.phone)) {
+        ElMessage({
+            message: '手机号码格式不对',
+            type: 'warning'
+        })
+        return
+    }
+
+    if (!verifyPassword(loginData.password)) {
+        ElMessage({
+            message: '密码格式不对',
+            type: 'warning'
+        })
+        return
+    }
+
     myReq
         .request<Idata<ILogin>>({
             method: 'POST',
@@ -114,9 +130,7 @@ const reqLogin = () => {
             }
         })
         .then((res) => {
-            // console.log(11111)
-            // console.log(res.data.meta)
-            if (res.data.meta.code === '200') {
+            if (res?.data.meta.code === '200') {
                 ElMessage({
                     message: res.data.meta.description,
                     grouping: true,
@@ -126,6 +140,14 @@ const reqLogin = () => {
                         router.go(-1)
                     }
                 })
+                store.token = res.data.meta.tocken ?? ''
+                localStorage.setItem(
+                    'loginData',
+                    JSON.stringify({
+                        phone: loginData.phone,
+                        password: loginData.password
+                    })
+                )
             } else {
                 ElMessage({
                     message: res.data.meta.description,
@@ -133,16 +155,20 @@ const reqLogin = () => {
                     customClass: 'el-custom-fail',
                     offset: 40
                 })
-                // store.actGetRandomKey()
             }
         })
 }
 
 const initLoginData = () => {
-    // store.actGetRandomKey()
     if (store.signUpCode === 200) {
         loginData.phone = store.signUp.phone
         loginData.password = store.signUp.password
+        return
+    }
+
+    if (localStorage.getItem('loginData')) {
+        loginData.phone = JSON.parse(localStorage.getItem('loginData') as string)!.phone
+        loginData.password = JSON.parse(localStorage.getItem('loginData') as string)!.password
     }
 }
 

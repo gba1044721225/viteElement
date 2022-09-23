@@ -3,6 +3,7 @@
         <custom-menu></custom-menu>
         <custom-input></custom-input>
         <custom-login-and-regist></custom-login-and-regist>
+        <custom-avatar></custom-avatar>
     </div>
 </template>
 
@@ -10,6 +11,7 @@
 import CustomMenu from '@/components/Header/Menu/index.vue'
 import CustomInput from '@/components/Header/Input/index.vue'
 import CustomLoginAndRegist from '@/components/Header/LoginAndRegist/index.vue'
+import CustomAvatar from '@/components/Header/Avatar/index.vue'
 </script>
 
 <style scoped lang="scss">

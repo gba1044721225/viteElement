@@ -1,5 +1,5 @@
 <template>
-    <div class="custom-login-and-regist">
+    <div class="custom-login-and-regist" v-if="!store.token">
         <el-button type="primary" @click="linkToLogin"> 登录 </el-button>
         <el-button plain type="" @click="linkToRegist">注册</el-button>
     </div>
@@ -30,6 +30,7 @@ const linkToRegist = () => {
 
 <style lang="scss" scoped>
 .custom-login-and-regist {
+    width: 267px;
     // height: 70px;
     display: flex;
     align-items: center;
