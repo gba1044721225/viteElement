@@ -40,6 +40,7 @@ import { myReq } from '@/api/instanceReq/index'
 import { useLoginStore } from '@/store/index'
 import { useRouter } from 'vue-router'
 import { verifyPhone, verifyName, verifyPassword } from '@/utils/verify'
+import { setStorage, getStorageFromKey } from '@/utils/storage/config'
 import type { Idata } from '@/api/type/index'
 interface Icode {
     data: any
@@ -136,12 +137,13 @@ const reqLogin = () => {
                     grouping: true,
                     customClass: 'el-custom-succ',
                     offset: 40,
+                    duration: 1500,
                     onClose: () => {
                         router.go(-1)
                     }
                 })
                 store.token = res.data.meta.tocken ?? ''
-                localStorage.setItem(
+                setStorage(
                     'loginData',
                     JSON.stringify({
                         phone: loginData.phone,
@@ -165,10 +167,11 @@ const initLoginData = () => {
         loginData.password = store.signUp.password
         return
     }
-
-    if (localStorage.getItem('loginData')) {
-        loginData.phone = JSON.parse(localStorage.getItem('loginData') as string)!.phone
-        loginData.password = JSON.parse(localStorage.getItem('loginData') as string)!.password
+    // console.log(getStorageFromKey('loginData'))
+    if (getStorageFromKey('loginData')) {
+        console.log(getStorageFromKey('loginData'))
+        loginData.phone = JSON.parse(getStorageFromKey('loginData')).phone
+        loginData.password = JSON.parse(getStorageFromKey('loginData')).password
     }
 }
 

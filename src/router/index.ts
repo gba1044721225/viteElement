@@ -102,8 +102,11 @@ const routes: RouteRecordRaw[] = [
         }
     },
     {
-        path: '/test',
-        component: () => import('@/views/EditorLjc/index.vue')
+        path: '/editorLjc',
+        component: () => import('@/views/EditorLjc/index.vue'),
+        meta: {
+            title: '编辑文章'
+        }
     }
 ]
 

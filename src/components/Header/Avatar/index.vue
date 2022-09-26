@@ -2,8 +2,7 @@
     <div class="custom-avatar" v-if="store.token">
         <el-dropdown>
             <el-avatar
-                size="large"
-                src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+                src="https://img0.baidu.com/it/u=2553753384,879501857&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1664298000&t=63b94171ef6c28e319179a8ed89e989f"
             />
             <template #dropdown>
                 <el-dropdown-menu>
@@ -21,10 +20,21 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 import { useLoginStore } from '@/store/index'
+import { useRouter } from 'vue-router'
 const store = useLoginStore()
+const router = useRouter()
 const avatarList = reactive([
     {
-        label: '退出',
+        label: '编辑文章',
+        value: 'logout',
+        handler: () => {
+            router.push({
+                path: '/editorLjc'
+            })
+        }
+    },
+    {
+        label: '退出登录',
         value: 'logout',
         handler: () => {
             store.token = ''
