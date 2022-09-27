@@ -150,6 +150,7 @@ const reqLogin = () => {
                         password: loginData.password
                     })
                 )
+                setStorage('token', res.data.meta.tocken)
             } else {
                 ElMessage({
                     message: res.data.meta.description,

@@ -9,7 +9,7 @@
             v-for="item in tabList"
             :key="item.id"
             @click="changeTab(item.id)"
-            :class="{ isActivted: currentId == item.id }"
+            :class="{ isActivted: item.id == route.meta.id }"
         >
             <div class="label">
                 {{ item.label }}
@@ -22,15 +22,13 @@
 import { ref } from 'vue'
 import { useTabStore } from '@/store'
 import { storeToRefs } from 'pinia'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 const store = useTabStore()
 const router = useRouter()
+const route = useRoute()
 const { tabList } = storeToRefs(store)
-const currentId = ref<string>('home')
 const changeTab = (id: string) => {
-    // currentId.value = item.id
     console.log(tabList)
-    currentId.value = id
     router.push({
         path: `/layout/layout-main/${id}`
     })

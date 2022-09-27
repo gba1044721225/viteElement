@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { myReq } from '@/api/instanceReq/index'
 import type { Idata } from '@/api/type/index'
+import { getStorageFromKey } from '@/utils/storage/config'
 interface Icode {
     data: any
     meta: {
@@ -59,7 +60,7 @@ export const useLoginStore = defineStore('headerLogin', {
                 password: ''
             },
             signUpCode: 500,
-            token: '',
+            token: getStorageFromKey('token'),
             from: '',
             key: ''
         }
@@ -83,6 +84,14 @@ export const useLoginStore = defineStore('headerLogin', {
                 method: 'GET',
                 url: 'sys-user/randomImage/' + this.key
             })
+        }
+    }
+})
+
+export const useEditorStore = defineStore('EditorLjc', {
+    state: () => {
+        return {
+            editorHtml: ''
         }
     }
 })

@@ -16,7 +16,7 @@ import CustomAvatar from '@/components/Header/Avatar/index.vue'
 
 <style scoped lang="scss">
 .layout-header {
-    overflow-x: scroll;
+    // overflow-x: scroll;
     min-height: 40px; /* px-to-viewport-ignore */
     height: $head-height;
     box-sizing: border-box;
