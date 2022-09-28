@@ -41,27 +41,7 @@ import { useLoginStore } from '@/store/index'
 import { useRouter } from 'vue-router'
 import { verifyPhone, verifyName, verifyPassword } from '@/utils/verify'
 import { setStorage, getStorageFromKey } from '@/utils/storage/config'
-import type { Idata } from '@/api/type/index'
-interface Icode {
-    data: any
-    meta: {
-        code?: string | number
-        description?: string
-        from?: string
-        serverity?: string
-        tocken?: string
-    }
-}
-interface ILogin {
-    data: any
-    meta: {
-        code?: string | number
-        description?: string
-        from?: string
-        serverity?: string
-        tocken?: string
-    }
-}
+
 interface Props {
     img: string
 }
@@ -89,15 +69,9 @@ const loginData = reactive({
     verifyType: 'P'
 })
 const getCode = () => {
-    myReq
-        .request<Idata<Icode>>({
-            method: 'GET',
-            url: 'sys-user/randomImage/' + store.key
-        })
-        .then((res) => {
-            console.log(res.data.data)
-            imgSrc.value = res.data.data
-        })
+    store.getCode().then((res) => {
+        imgSrc.value = res.data
+    })
 }
 const reqLogin = () => {
     if (!verifyPhone(loginData.phone)) {
@@ -117,7 +91,7 @@ const reqLogin = () => {
     }
 
     myReq
-        .request<Idata<ILogin>>({
+        .request({
             method: 'POST',
             url: '/sys-user/login',
             data: {
@@ -131,9 +105,9 @@ const reqLogin = () => {
             }
         })
         .then((res) => {
-            if (res?.data.meta.code === '200') {
+            if (res.meta.code === '200') {
                 ElMessage({
-                    message: res.data.meta.description,
+                    message: res.meta.description,
                     grouping: true,
                     customClass: 'el-custom-succ',
                     offset: 40,
@@ -142,7 +116,7 @@ const reqLogin = () => {
                         router.go(-1)
                     }
                 })
-                store.token = res.data.meta.tocken ?? ''
+                store.token = res.meta.tocken ?? ''
                 setStorage(
                     'loginData',
                     JSON.stringify({
@@ -150,10 +124,10 @@ const reqLogin = () => {
                         password: loginData.password
                     })
                 )
-                setStorage('token', res.data.meta.tocken)
+                setStorage('token', res.meta.tocken)
             } else {
                 ElMessage({
-                    message: res.data.meta.description,
+                    message: res.meta.description,
                     grouping: true,
                     customClass: 'el-custom-fail',
                     offset: 40

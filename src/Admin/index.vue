@@ -23,8 +23,7 @@ const code = ref<string>('')
 onMounted(() => {
     store.actGetRandomKey()
     store.getCode().then((res) => {
-        code.value = res.data.data
-        // console.log(code.value)
+        code.value = res.data
     })
 })
 onBeforeUnmount(() => {

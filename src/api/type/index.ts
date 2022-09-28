@@ -5,19 +5,18 @@ import type {
     AxiosResponse
 } from 'axios'
 
-interface InterceptorsConfig {
+interface InterceptorsConfig<T = AxiosResponse> {
     reqFn?: (value: AxiosRequestConfig) => AxiosRequestConfig | Promise<AxiosRequestConfig>
     reqRejFn?: (error: any) => any
-    resFn?: <T = AxiosResponse>(
-        value: T
-    ) => T | Promise<T> | ((value: AxiosResponse) => AxiosResponse)
+    // resFn?: <T>(value: T) => T | Promise<T>
+    resFn?: (value: T) => T | Promise<T>
     resRejFn?: (error: any) => any
 }
 
-interface HyConfig extends AxiosRequestConfig {
-    interceptorsFn?: InterceptorsConfig
+interface HyConfig<T = AxiosResponse> extends AxiosRequestConfig {
+    interceptorsFn?: InterceptorsConfig<T>
 }
-interface Idata<D> {
+interface Iaxios<D> {
     config: {
         [index: string]: any
     }
@@ -29,11 +28,23 @@ interface Idata<D> {
     statusText: string
 }
 
+interface Idata {
+    data: any
+    meta: {
+        code?: string | number
+        description?: string
+        from?: string
+        serverity?: string
+        tocken?: string
+    }
+}
+
 export type {
     AxiosRequestConfig,
     AxiosInstance,
     AxiosInterceptorManager,
     InterceptorsConfig,
     HyConfig,
+    Iaxios,
     Idata
 }

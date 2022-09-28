@@ -1,11 +1,9 @@
 <template>
     <div class="editor-ljc">
-        <!-- {{ headerData }} -->
-        <el-card style="margin-bottom: 20px">
+        <layout-header></layout-header>
+        <div class="editor-box">
+            <!-- {{ headerData }} -->
             <editor-header v-model:headerData="headerData"></editor-header>
-        </el-card>
-
-        <el-card>
             <div style="border: 1px solid #ccc">
                 <Toolbar
                     style="border-bottom: 1px solid #ccc"
@@ -33,11 +31,12 @@
                     暂存<el-icon class="el-icon--right"><Upload /></el-icon>
                 </el-button>
             </div>
-        </el-card>
+        </div>
     </div>
 </template>
 <script lang="ts" setup>
 import EditorHeader from './Editor-Header/index.vue'
+import LayoutHeader from '@/views/LayoutHeader/index.vue'
 import '@wangeditor/editor/dist/css/style.css' // 引入 css
 import { myReq } from '@/api/instanceReq'
 import { onBeforeUnmount, ref, shallowRef, onMounted } from 'vue'
@@ -166,9 +165,11 @@ const reqAddArticle = () => {
 
 <style lang="scss" scoped>
 .editor-ljc {
-    padding: 20px 20px 0 20px;
-    background: rgba(100, 100, 100, 0.1);
     min-height: 100vh;
+
+    .editor-box {
+        margin-top: 7px;
+    }
 
     .editor-btns {
         margin-top: 20px;

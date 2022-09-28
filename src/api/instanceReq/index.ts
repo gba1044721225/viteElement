@@ -1,4 +1,5 @@
 import { RequestHy } from '@/api/request'
+import { encrypt } from '@/utils/storage/encry'
 const env = import.meta.env
 
 export const myReq = new RequestHy({
@@ -6,6 +7,10 @@ export const myReq = new RequestHy({
     timeout: 5000,
     interceptorsFn: {
         reqFn(config) {
+            console.log('config', config)
+            if (config.data) {
+                config.data = encrypt(config.data)
+            }
             return config
         },
         reqRejFn(err) {

@@ -34,6 +34,15 @@ const avatarList = reactive([
         }
     },
     {
+        label: '个人主页',
+        value: 'archives',
+        handler: () => {
+            router.push({
+                path: '/archives'
+            })
+        }
+    },
+    {
         label: '退出登录',
         value: 'logout',
         handler: () => {

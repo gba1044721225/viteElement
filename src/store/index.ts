@@ -80,7 +80,7 @@ export const useLoginStore = defineStore('headerLogin', {
             // console.log(this.key)
         },
         async getCode() {
-            return myReq.request<Idata<Icode>>({
+            return myReq.request<Icode>({
                 method: 'GET',
                 url: 'sys-user/randomImage/' + this.key
             })

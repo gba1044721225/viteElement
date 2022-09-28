@@ -1,6 +1,11 @@
-import { rejects } from 'assert'
 import axios from 'axios'
-import { AxiosRequestConfig, AxiosInstance, InterceptorsConfig, HyConfig } from '../type'
+import type {
+    AxiosRequestConfig,
+    AxiosInstance,
+    InterceptorsConfig,
+    HyConfig,
+    Idata
+} from '../type'
 
 export class RequestHy {
     //axios实例类型
@@ -20,9 +25,27 @@ export class RequestHy {
             this.interceptorsFn?.resFn,
             this.interceptorsFn?.resRejFn
         )
+
+        this.instance.interceptors.request.use(
+            (config) => {
+                return config
+            },
+            (err) => {
+                return err
+            }
+        )
+
+        this.instance.interceptors.response.use(
+            (res) => {
+                return res.data
+            },
+            (err) => {
+                return err
+            }
+        )
     }
 
-    request<T>(config: HyConfig): Promise<T> {
+    request<T = Idata>(config: HyConfig<T>): Promise<T> {
         // console.log(22222)
         return new Promise((resolve, rejects) => {
             if (config.interceptorsFn?.reqFn) {

@@ -38,28 +38,6 @@ import emitter from '@/utils/mitter.js'
 import { useLoginStore } from '@/store/index'
 import { myReq } from '@/api/instanceReq/index'
 import { verifyPhone, verifyName, verifyPassword, verifyEmail } from '@/utils/verify'
-import type { Idata } from '@/api/type/index'
-
-interface Icode {
-    data: any
-    meta: {
-        code?: string | number
-        description?: string
-        from?: string
-        serverity?: string
-        tocken?: string
-    }
-}
-interface IRegist {
-    data: any
-    meta: {
-        code?: string | number
-        description?: string
-        from?: string
-        serverity?: string
-        tocken?: string
-    }
-}
 interface Props {
     img: string
 }
@@ -88,15 +66,9 @@ const registData = reactive({
     phone: ''
 })
 const getCode = () => {
-    myReq
-        .request<Idata<Icode>>({
-            method: 'GET',
-            url: 'sys-user/randomImage/' + store.key
-        })
-        .then((res) => {
-            // console.log(res.data.data)
-            imgSrc.value = res.data.data
-        })
+    store.getCode().then((res) => {
+        imgSrc.value = res.data
+    })
 }
 const getRegist = () => {
     if (!verifyName(registData.name)) {
@@ -137,7 +109,7 @@ const getRegist = () => {
     }
     console.log(data)
     myReq
-        .request<Idata<IRegist>>({
+        .request({
             method: 'POST',
             url: '/sys-user/create',
             data: {
@@ -150,9 +122,9 @@ const getRegist = () => {
         })
         .then((res) => {
             console.log(res.data)
-            if (res.data.meta.code === '200') {
+            if (res.meta.code === '200') {
                 ElMessage({
-                    message: res.data.meta.description,
+                    message: res.meta.description,
                     grouping: true,
                     customClass: 'el-custom-succ',
                     offset: 40
@@ -162,7 +134,7 @@ const getRegist = () => {
                 getCode()
             } else {
                 ElMessage({
-                    message: res.data.meta.description,
+                    message: res.meta.description,
                     grouping: true,
                     customClass: 'el-custom-fail',
                     offset: 40

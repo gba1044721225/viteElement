@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Layout from './Layout'
 import LoginOrRegist from './LoginOrRegist'
 import EditorLjc from './EditorLjc'
+import Archives from './Archives'
 import type { Router, RouteRecordRaw } from 'vue-router'
 const ICLUDE_ROUTES = []
 const routes: RouteRecordRaw[] = [
@@ -11,7 +12,8 @@ const routes: RouteRecordRaw[] = [
     },
     Layout,
     LoginOrRegist,
-    EditorLjc
+    EditorLjc,
+    Archives
 ]
 
 const router: Router = createRouter({

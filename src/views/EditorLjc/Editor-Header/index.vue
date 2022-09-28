@@ -1,43 +1,26 @@
 <template>
     <div class="editor-header">
-        <div class="header-logo">
-            <div class="tab-item logo">
-                <img src="@/assets/vue.svg" alt="" />
-                <div class="logo">logo</div>
-            </div>
-        </div>
         <div class="edit-input">
-            <el-form label-width="120px">
-                <el-form-item label="填写文章标题">
-                    <el-input
-                        v-model="titleKey"
-                        class="w-50 m-2"
-                        size="large"
-                        placeholder="请输入文章标题"
-                    >
-                    </el-input>
+            <el-form :inline="true" class="demo-form-inline">
+                <el-form-item label="文章标题">
+                    <el-input v-model="titleKey" placeholder="Approved by" />
                 </el-form-item>
-                <el-form-item label="分类">
-                    <el-select v-model="selectValue" class="m-2" placeholder="Select" size="large">
+                <el-form-item label="文章类别">
+                    <el-select v-model="selectValue" placeholder="Activity zone">
                         <el-option
-                            v-for="item in options"
-                            :key="item.value"
                             :label="item.label"
                             :value="item.value"
+                            v-for="item in options"
+                            :key="item.value"
                         />
                     </el-select>
                 </el-form-item>
             </el-form>
         </div>
-        <div class="custom-avatar">
-            <custom-avatar></custom-avatar>
-        </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import CustomAvatar from '@/components/Header/Avatar/index.vue'
-import { join } from 'path/posix'
 import { ref, defineProps, computed } from 'vue'
 interface Props {
     headerData?: {
@@ -111,11 +94,11 @@ const options: Iopt[] = [
 <style lang="scss" scoped>
 .editor-header {
     width: 100%;
-    min-height: 20px; /* px-to-viewport-ignore */
-    height: 30px;
+    min-height: 40px; /* px-to-viewport-ignore */
+    height: 50px;
     box-sizing: border-box;
-    // padding: 0 $pad-page;
     background-color: rgba(250, 250, 250, 1);
+    margin-bottom: 5px;
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-around;
@@ -126,7 +109,7 @@ const options: Iopt[] = [
             display: flex;
             flex-wrap: nowrap;
             align-items: center;
-            justify-content: center;
+            // justify-content: center;
         }
         .el-form-item {
             display: flex;
@@ -135,19 +118,6 @@ const options: Iopt[] = [
             margin-left: 20px;
             margin-bottom: 0;
         }
-    }
-
-    .custom-avatar {
-        display: flex;
-        flex-direction: row-reverse;
-    }
-
-    .tab-item.logo {
-        display: flex;
-        flex-wrap: nowrap;
-        justify-content: center;
-        align-items: center;
-        margin-right: 20px;
     }
 }
 </style>
