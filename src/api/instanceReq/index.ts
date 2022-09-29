@@ -7,10 +7,10 @@ export const myReq = new RequestHy({
     timeout: 5000,
     interceptorsFn: {
         reqFn(config) {
-            console.log('config', config)
-            if (config.data) {
-                config.data = encrypt(config.data)
-            }
+            // console.log('config', config)
+            // if (config.data) {
+            //     config.data = encrypt(config.data)
+            // }
             return config
         },
         reqRejFn(err) {

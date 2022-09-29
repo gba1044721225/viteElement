@@ -43,18 +43,22 @@ import { onBeforeUnmount, ref, shallowRef, onMounted } from 'vue'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import { Check, Delete } from '@element-plus/icons-vue'
 import { useEditorStore, useLoginStore } from '@/store/index'
-
 import type { Action } from 'element-plus'
-import type { Idata } from '@/api/type/index'
 const edStore = useEditorStore()
 const lgStore = useLoginStore()
 interface IheaderData {
     titleKey: string
-    selectValue: string
+    selectValue: {
+        value: string | number
+        type: string
+    }
 }
 const headerData = ref<IheaderData>({
     titleKey: '',
-    selectValue: ''
+    selectValue: {
+        value: '',
+        type: ''
+    }
 })
 
 // 编辑器实例，必须用 shallowRef
@@ -124,18 +128,28 @@ const openDelete = () => {
     })
 }
 
-const store = useLoginStore()
-interface Iedit {
-    data: any
-    meta: {
-        code?: string | number
-        description?: string
-        from?: string
-        serverity?: string
-        tocken?: string
-    }
-}
+// 添加文章
 const reqAddArticle = () => {
+    if (headerData.value.selectValue.value === '') {
+        ElMessage({
+            message: '请选择文章类别',
+            grouping: true,
+            customClass: 'el-custom-fail',
+            offset: 40
+        })
+        return
+    }
+
+    if (headerData.value.titleKey === '') {
+        ElMessage({
+            message: '请填写文章标题',
+            grouping: true,
+            customClass: 'el-custom-fail',
+            offset: 40
+        })
+        return
+    }
+
     const data = {
         data: {
             articleId: '',
@@ -143,8 +157,8 @@ const reqAddArticle = () => {
             flag: '',
             modifyTime: new Date(),
             title: headerData.value.titleKey,
-            topicId: '',
-            type: ''
+            topicId: headerData.value.selectValue.value,
+            type: headerData.value.selectValue.type
         },
         meta: {
             from: 'P',
@@ -152,7 +166,7 @@ const reqAddArticle = () => {
         }
     }
     myReq
-        .request<Idata<Iedit>>({
+        .request({
             method: 'POST',
             url: 'article/add',
             data

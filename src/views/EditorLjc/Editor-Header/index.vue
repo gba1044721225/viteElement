@@ -9,9 +9,9 @@
                     <el-select v-model="selectValue" placeholder="Activity zone">
                         <el-option
                             :label="item.label"
-                            :value="item.value"
+                            :value="item.selectValue"
                             v-for="item in options"
-                            :key="item.value"
+                            :key="item.selectValue.value"
                         />
                     </el-select>
                 </el-form-item>
@@ -22,16 +22,26 @@
 
 <script lang="ts" setup>
 import { ref, defineProps, computed } from 'vue'
+import { myReq } from '@/api/instanceReq'
+import { useEditorStore, useLoginStore } from '@/store/index'
+const edStore = useEditorStore()
+const lgStore = useLoginStore()
 interface Props {
     headerData?: {
         titleKey: string
-        selectValue: string
+        selectValue: {
+            type: string
+            value: string | number
+        }
     }
 }
 const props = withDefaults(defineProps<Props>(), {
     headerData: () => ({
         titleKey: '',
-        selectValue: ''
+        selectValue: {
+            type: '',
+            value: ''
+        }
     })
 })
 
@@ -58,6 +68,7 @@ const selectValue = computed({
     set(val) {
         console.log(val)
         const newVal = JSON.parse(JSON.stringify(props.headerData))
+        console.log(newVal)
         newVal.selectValue = val
         emit('update:headerData', newVal)
     }
@@ -65,30 +76,55 @@ const selectValue = computed({
 
 interface Iopt {
     label: string
-    value: string | number
-}
-const options: Iopt[] = [
-    {
-        value: 'Option1',
-        label: 'Option1'
-    },
-    {
-        value: 'Option2',
-        label: 'Option2'
-    },
-    {
-        value: 'Option3',
-        label: 'Option3'
-    },
-    {
-        value: 'Option4',
-        label: 'Option4'
-    },
-    {
-        value: 'Option5',
-        label: 'Option5'
+    selectValue: {
+        value: string | number
+        type: string
     }
-]
+}
+const options = ref<Iopt[]>()
+
+// 获取所有分类和专题
+const reqGetCategory = () => {
+    myReq
+        .request({
+            method: 'POST',
+            url: 'article/list/category',
+            data: {
+                data: '',
+                meta: {
+                    from: 'P',
+                    token: lgStore.token
+                }
+            }
+        })
+        .then((res) => {
+            options.value = []
+            // console.log('res', res.data.categotys)
+            if (res.meta.code === '200') {
+                res.data.categotys.forEach(
+                    (v: { topicName: string; topicId: string; type: string }) => {
+                        const obj = {
+                            label: '',
+                            selectValue: {
+                                value: '',
+                                type: ''
+                            }
+                        }
+                        obj.label = v.topicName
+                        obj.selectValue.value = v.topicId
+                        obj.selectValue.type = v.type
+                        if (options.value) {
+                            options.value?.push(obj)
+                        }
+                    }
+                )
+            }
+        })
+}
+
+onMounted(() => {
+    reqGetCategory()
+})
 </script>
 
 <style lang="scss" scoped>
