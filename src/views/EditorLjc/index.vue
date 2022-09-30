@@ -43,7 +43,7 @@ import { onBeforeUnmount, ref, shallowRef, onMounted } from 'vue'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import { Check, Delete } from '@element-plus/icons-vue'
 import { useEditorStore, useLoginStore } from '@/store/index'
-import type { Action } from 'element-plus'
+import { Action, ElMessageBox } from 'element-plus'
 const edStore = useEditorStore()
 const lgStore = useLoginStore()
 interface IheaderData {
