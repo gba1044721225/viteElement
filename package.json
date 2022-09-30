@@ -13,6 +13,7 @@
     "@wangeditor/editor-for-vue": "^5.1.12",
     "axios": "^0.27.2",
     "cropperjs": "^2.0.0-beta.1",
+    "default-passive-events": "^2.0.0",
     "element-plus": "^2.2.16",
     "mitt": "^3.0.0",
     "pinia": "^2.0.22",
