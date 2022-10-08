@@ -2,18 +2,69 @@
     <div class="my-info">
         <el-form ref="form" :model="infoForm" label-width="auto">
             <el-form-item label="我的头像">
-                <div class="upload-avatar" @click="openDialog">
+                <div v-if="infoForm.imgSrc === ''" class="upload-avatar" @click="openDialog">
                     <el-icon><Plus /></el-icon>
                     <el-dialog
                         v-model="infoForm.dialogFormVisible"
+                        title="头像选择"
                         class="my-dialog"
                         :lock-scroll="true"
                         :destroy-on-close="true"
                         :close-on-click-modal="false"
+                        @close="closeDialog(0)"
                     >
-                        <div class="my-cropper"></div>
+                        <vueCropper
+                            ref="cropper"
+                            :img="option.img"
+                            :outputSize="option.outputSize"
+                            :outputType="option.outputType"
+                            :info="option.info"
+                            :canScale="option.canScale"
+                            :autoCrop="option.autoCrop"
+                            :autoCropWidth="option.autoCropWidth"
+                            :autoCropHeight="option.autoCropHeight"
+                            :fixed="option.fixed"
+                            :fixedNumber="option.fixedNumber"
+                            :full="option.full"
+                            :fixedBox="option.fixedBox"
+                            :canMove="option.canMove"
+                            :canMoveBox="option.canMoveBox"
+                            :original="option.original"
+                            :centerBox="option.centerBox"
+                            :height="option.height"
+                            :infoTrue="option.infoTrue"
+                            :maxImgSize="option.maxImgSize"
+                            :enlarge="option.enlarge"
+                            :mode="option.mode"
+                            @realTime="realTimeEvent"
+                        ></vueCropper>
+                        <div class="dialog-left">
+                            <div
+                                class="show-preview"
+                                :style="{
+                                    width: option.previews.w + 'px',
+                                    height: option.previews.h + 'px',
+                                    margin: '5px'
+                                }"
+                            >
+                                <div :style="option.previews.div" class="preview">
+                                    <img :src="option.previews.url" :style="option.previews.img" />
+                                </div>
+                            </div>
+                            <div class="btns">
+                                <el-button @click="changePhoto">更换图片</el-button>
+                                <el-button @click="closeDialog(1)">确定</el-button>
+                            </div>
+                        </div>
                     </el-dialog>
                 </div>
+                <img
+                    class="avatar-box"
+                    v-if="infoForm.imgSrc !== ''"
+                    :src="infoForm.imgSrc"
+                    alt=""
+                    @click="openDialog"
+                />
                 <!-- <div class="my-cropper"></div> -->
             </el-form-item>
             <el-form-item label="Activity zone">
@@ -64,10 +115,10 @@
 
 <script setup lang="ts">
 import { reactive, nextTick, ref } from 'vue'
-import Cropper, { CropperImage } from 'cropperjs'
-import 'default-passive-events'
-
-const imageCropper = ref()
+// import 'default-passive-events'
+import 'vue-cropper/dist/index.css'
+import { VueCropper } from 'vue-cropper'
+const cropper = ref()
 const infoForm = reactive({
     fileList: [],
     dialogFormVisible: false,
@@ -81,51 +132,53 @@ const infoForm = reactive({
     resource: '',
     desc: ''
 })
+interface Ioption {
+    [index: string]: any
+}
+const option = reactive<Ioption>({
+    img: '', // 裁剪图片的地址
+    outputSize: 1, // 裁剪生成图片的质量(可选0.1 - 1)
+    outputType: 'jpeg', // 裁剪生成图片的格式（jpeg || png || webp）
+    info: true, // 图片大小信息
+    canScale: true, // 图片是否允许滚轮缩放
+    autoCrop: true, // 是否默认生成截图框
+    autoCropWidth: 150, // 默认生成截图框宽度
+    autoCropHeight: 150, // 默认生成截图框高度
+    fixed: true, // 是否开启截图框宽高固定比例
+    fixedNumber: [1, 1], // 截图框的宽高比例
+    full: false, // false按原比例裁切图片，不失真
+    fixedBox: true, // 固定截图框大小，不允许改变
+    canMove: false, // 上传图片是否可以移动
+    canMoveBox: true, // 截图框能否拖动
+    original: false, // 上传图片按照原始比例渲染
+    centerBox: false, // 截图框是否被限制在图片里面
+    height: true, // 是否按照设备的dpr 输出等比例图片
+    infoTrue: false, // true为展示真实输出图片宽高，false展示看到的截图框宽高
+    maxImgSize: 3000, // 限制图片最大宽度和高度
+    enlarge: 1, // 图片根据截图框输出比例倍数
+    mode: 'contain', // 图片默认渲染方式
+    previews: {}
+})
 
-const openDialog = async () => {
-    if (infoForm.dialogFormVisible === true) {
-        return
-    }
-
+const changePhoto = async () => {
     const files: any = await uploadFile('image/*', true)
     // console.log(files)
     const windowURL = window.URL || window.webkitURL
     // console.log(windowURL.createObjectURL(files[0]))
     infoForm.dialogFormVisible = true
     nextTick(() => {
+        console.log(files[0])
         const srcBlob = windowURL.createObjectURL(files[0])
-        infoForm.imgSrc = srcBlob
-        const image = new Image()
-
-        image.src = srcBlob
-        image.alt = 'Picture'
-
-        imageCropper.value = new Cropper(image, {
-            container: '.my-cropper',
-            template: `
-            <cropper-canvas background="true" class="cropper-canvas">
-                <cropper-image></cropper-image>
-                <cropper-shade hidden></cropper-shade>
-                <cropper-handle action="select" plain></cropper-handle>
-                <cropper-selection initial-coverage="0.5" movable resizable zoomable>
-                <cropper-grid role="grid" bordered covered></cropper-grid>
-                <cropper-crosshair theme-color="rgba(238, 238, 238, 0.5)" centered></cropper-crosshair>
-                <cropper-handle action="move" theme-color="rgba(255, 255, 255, 0.35)"></cropper-handle>
-                <cropper-handle action="n-resize"></cropper-handle>
-                <cropper-handle action="e-resize"></cropper-handle>
-                <cropper-handle action="s-resize"></cropper-handle>
-                <cropper-handle action="w-resize"></cropper-handle>
-                <cropper-handle action="ne-resize"></cropper-handle>
-                <cropper-handle action="nw-resize"></cropper-handle>
-                <cropper-handle action="se-resize"></cropper-handle>
-                <cropper-handle action="sw-resize"></cropper-handle>
-                </cropper-selection>
-            </cropper-canvas>
-            `
-        })
-
-        console.log(imageCropper.value.getCropperImage())
+        // console.log(srcBlob)
+        option.img = srcBlob
     })
+}
+
+const openDialog = async () => {
+    if (infoForm.dialogFormVisible === true) {
+        return
+    }
+    changePhoto()
 }
 
 const uploadFile = (accept: string, multiple = false) => {
@@ -140,7 +193,7 @@ const uploadFile = (accept: string, multiple = false) => {
         }
         elementA.style.display = 'none'
         elementA.onchange = (e) => {
-            console.log(e)
+            // console.log(e)
             if (elementA.files && elementA.files.length > 0) {
                 resolve(elementA.files)
             }
@@ -150,10 +203,41 @@ const uploadFile = (accept: string, multiple = false) => {
         document.body.removeChild(elementA)
     })
 }
+
+const realTimeEvent = (e: any) => {
+    option.previews = e
+}
+
+enum Econfirm {
+    ok = 1,
+    cancel = 0
+}
+
+const closeDialog = (val: Econfirm) => {
+    switch (val) {
+        case 1:
+            cropper.value.getCropBlob((data: any) => {
+                // do something
+                const windowURL = window.URL || window.webkitURL
+                const srcBlob = windowURL.createObjectURL(data)
+                console.log(srcBlob)
+                infoForm.imgSrc = srcBlob
+                infoForm.dialogFormVisible = false
+            })
+            break
+    }
+}
 </script>
 
 <style lang="scss" scoped>
 .my-info {
+    .avatar-box {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.1);
+    }
+
     .upload-avatar {
         display: flex;
         align-items: center;
@@ -161,32 +245,53 @@ const uploadFile = (accept: string, multiple = false) => {
         width: 100px;
         height: 100px;
         border: 1px dashed rgb(102, 111, 234);
-        border-radius: 10px;
+        border-radius: 50%;
         cursor: pointer;
-        .my-cropper {
-            width: 500px;
-            height: 500px;
-            .image {
-                width: 500px;
-                height: 400px;
-            }
-            :deep(.cropper-canvas) {
-                width: 500px;
-                height: 400px;
-                // display: flex;
-                // justify-content: center;
-                // align-items: center;
-            }
-            :deep(img) {
-                height: 500px;
-            }
-        }
 
-        :deep(.my-dialog) {
+        // :deep(.my-dialog) {
+        //     display: flex;
+        //     flex-direction: column;
+        //     justify-content: center;
+        //     align-items: center;
+        // }
+        :deep(.el-dialog__body) {
+            margin: 0 auto;
+            width: 900px;
+            height: 400px;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            display: -webkit-flex;
+
+            .vue-cropper {
+                flex: 8;
+                .cropper-box {
+                    flex: 1;
+                    width: 100%;
+                    .cropper {
+                        width: 400px;
+                        height: 500px;
+                    }
+                }
+            }
+
+            .dialog-left {
+                margin-left: 20px;
+                flex: 2;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                .show-preview {
+                    width: 200px;
+                    display: flex;
+                    display: -webkit-flex;
+                    justify-content: center;
+                    .preview {
+                        overflow: hidden;
+                        background: #cccccc;
+                        border-radius: 50%;
+                        border: 1px solid #cccccc;
+                    }
+                }
+            }
         }
     }
 }

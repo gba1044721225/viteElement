@@ -66,7 +66,8 @@ const loginData = reactive({
     password: '',
     phone: '',
     verifyCode: '',
-    verifyType: 'P'
+    verifyType: 'P',
+    key: store.key
 })
 const getCode = () => {
     store.getCode().then((res) => {
