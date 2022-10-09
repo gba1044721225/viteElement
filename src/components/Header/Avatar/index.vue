@@ -21,6 +21,8 @@
 import { reactive } from 'vue'
 import { useLoginStore } from '@/store/index'
 import { useRouter } from 'vue-router'
+import { removeStorageFromKey } from '@/utils/storage/config'
+import { myReq } from '@/api/instanceReq/index'
 const store = useLoginStore()
 const router = useRouter()
 const avatarList = reactive([
@@ -46,7 +48,43 @@ const avatarList = reactive([
         label: '退出登录',
         value: 'logout',
         handler: () => {
-            store.token = ''
+            myReq
+                .request({
+                    method: 'POST',
+                    url: '/sys-user/logout',
+                    data: {
+                        meta: {
+                            from: 'P',
+                            token: store.token
+                        }
+                    }
+                })
+                .then((res) => {
+                    console.log('退出', res)
+                    if (res.meta.code === '200') {
+                        ElMessage({
+                            message: res.meta.description,
+                            grouping: true,
+                            customClass: 'el-custom-succ',
+                            offset: 40,
+                            duration: 1500,
+                            onClose: () => {
+                                store.token = ''
+                                removeStorageFromKey('token')
+                                router.push('/layout')
+                            }
+                        })
+                    } else {
+                        ElMessage({
+                            message: res.meta.description,
+                            grouping: true,
+                            customClass: 'el-custom-fail',
+                            offset: 40
+                        })
+                    }
+                })
+            // store.token = ''
+            // removeStorageFromKey('token')
         }
     }
 ])

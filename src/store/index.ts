@@ -1,17 +1,7 @@
 import { defineStore } from 'pinia'
 import { myReq } from '@/api/instanceReq/index'
-import type { Idata } from '@/api/type/index'
 import { getStorageFromKey } from '@/utils/storage/config'
-interface Icode {
-    data: any
-    meta: {
-        code?: string | number
-        description?: string
-        from?: string
-        serverity?: string
-        tocken?: string
-    }
-}
+
 export const useTabStore = defineStore('headerTab', {
     // other options...
     state: () => ({
@@ -52,6 +42,12 @@ export const useTabStore = defineStore('headerTab', {
 
 export const useLoginStore = defineStore('headerLogin', {
     state: () => {
+        // const keyPool = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
+        // const keyNum = 8
+        // let text = ''
+        // for (let i = 0; i < keyNum; i++) {
+        //     text += keyPool[Math.floor(Math.random() * 62)]
+        // }
         return {
             signUp: {
                 name: '',
@@ -80,7 +76,8 @@ export const useLoginStore = defineStore('headerLogin', {
             // console.log(this.key)
         },
         async getCode() {
-            return myReq.request<Icode>({
+            this.actGetRandomKey()
+            return myReq.request({
                 method: 'GET',
                 url: 'sys-user/randomImage/' + this.key
             })

@@ -103,11 +103,19 @@ const getRegist = () => {
         return
     }
 
+    if (registData.code === '') {
+        ElMessage({
+            message: '验证码不能为空',
+            type: 'warning'
+        })
+        return
+    }
+
     const data = {
         ...registData,
         key: store.key
     }
-    console.log(data)
+    // console.log(data)
     myReq
         .request({
             method: 'POST',
@@ -121,7 +129,8 @@ const getRegist = () => {
             }
         })
         .then((res) => {
-            console.log(res.data)
+            // console.log('res1111', res)
+            getCode()
             if (res.meta.code === '200') {
                 ElMessage({
                     message: res.meta.description,
@@ -131,7 +140,6 @@ const getRegist = () => {
                 })
                 store.signUpCode = 200
                 emitter.emit('registSucc', { code: 200 })
-                getCode()
             } else {
                 ElMessage({
                     message: res.meta.description,

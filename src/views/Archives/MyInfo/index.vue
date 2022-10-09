@@ -4,59 +4,6 @@
             <el-form-item label="我的头像">
                 <div v-if="infoForm.imgSrc === ''" class="upload-avatar" @click="openDialog">
                     <el-icon><Plus /></el-icon>
-                    <el-dialog
-                        v-model="infoForm.dialogFormVisible"
-                        title="头像选择"
-                        class="my-dialog"
-                        :lock-scroll="true"
-                        :destroy-on-close="true"
-                        :close-on-click-modal="false"
-                        @close="closeDialog(0)"
-                    >
-                        <vueCropper
-                            ref="cropper"
-                            :img="option.img"
-                            :outputSize="option.outputSize"
-                            :outputType="option.outputType"
-                            :info="option.info"
-                            :canScale="option.canScale"
-                            :autoCrop="option.autoCrop"
-                            :autoCropWidth="option.autoCropWidth"
-                            :autoCropHeight="option.autoCropHeight"
-                            :fixed="option.fixed"
-                            :fixedNumber="option.fixedNumber"
-                            :full="option.full"
-                            :fixedBox="option.fixedBox"
-                            :canMove="option.canMove"
-                            :canMoveBox="option.canMoveBox"
-                            :original="option.original"
-                            :centerBox="option.centerBox"
-                            :height="option.height"
-                            :infoTrue="option.infoTrue"
-                            :maxImgSize="option.maxImgSize"
-                            :enlarge="option.enlarge"
-                            :mode="option.mode"
-                            @realTime="realTimeEvent"
-                        ></vueCropper>
-                        <div class="dialog-left">
-                            <div
-                                class="show-preview"
-                                :style="{
-                                    width: option.previews.w + 'px',
-                                    height: option.previews.h + 'px',
-                                    margin: '5px'
-                                }"
-                            >
-                                <div :style="option.previews.div" class="preview">
-                                    <img :src="option.previews.url" :style="option.previews.img" />
-                                </div>
-                            </div>
-                            <div class="btns">
-                                <el-button @click="changePhoto">更换图片</el-button>
-                                <el-button @click="closeDialog(1)">确定</el-button>
-                            </div>
-                        </div>
-                    </el-dialog>
                 </div>
                 <img
                     class="avatar-box"
@@ -67,49 +14,101 @@
                 />
                 <!-- <div class="my-cropper"></div> -->
             </el-form-item>
-            <el-form-item label="Activity zone">
-                <el-select v-model="infoForm.region" placeholder="please select your zone">
-                    <el-option label="Zone one" value="shanghai" />
-                    <el-option label="Zone two" value="beijing" />
+            <el-form-item label="昵称">
+                <el-input
+                    :input-style="infoForm.inputStyle"
+                    v-model="infoForm.nickName"
+                    placeholder="请输入昵称"
+                />
+            </el-form-item>
+            <el-form-item label="工作方向">
+                <el-select v-model="infoForm.work" placeholder="请选择您的方向">
+                    <el-option
+                        v-for="item in infoForm.options"
+                        :label="item.label"
+                        :value="item.value"
+                        :key="item.value"
+                    />
                 </el-select>
             </el-form-item>
-            <el-form-item label="Activity time">
-                <el-col :span="11">
-                    <el-date-picker
-                        v-model="infoForm.date1"
-                        type="date"
-                        label="Pick a date"
-                        placeholder="Pick a date"
-                        style="width: 100%"
-                    />
-                </el-col>
-                <el-col class="text-center" :span="1" style="margin: 0 0.5rem">-</el-col>
-                <el-col :span="11">
-                    <el-time-picker
-                        v-model="infoForm.date2"
-                        label="Pick a time"
-                        placeholder="Pick a time"
-                        style="width: 100%"
-                    />
-                </el-col>
-            </el-form-item>
-            <el-form-item label="Activity type">
+            <el-form-item label="编程语言">
                 <el-checkbox-group v-model="infoForm.type">
-                    <el-checkbox-button label="Online activities" name="type" />
-                    <el-checkbox-button label="Promotion activities" name="type" />
+                    <el-checkbox-button
+                        v-for="item in infoForm.checkboxs"
+                        :label="item.value"
+                        name="type"
+                        :key="item.value"
+                    >
+                        {{ item.label }}
+                    </el-checkbox-button>
                 </el-checkbox-group>
             </el-form-item>
-            <el-form-item label="Resources">
-                <el-radio-group v-model="infoForm.resource">
-                    <el-radio border label="Sponsor" />
-                    <el-radio border label="Venue" />
+            <el-form-item label="性别">
+                <el-radio-group v-model="infoForm.sex">
+                    <el-radio border label="1"> 男 </el-radio>
+                    <el-radio border label="0"> 女 </el-radio>
                 </el-radio-group>
             </el-form-item>
-            <el-form-item>
-                <el-button type="primary">Create</el-button>
-                <el-button>Cancel</el-button>
-            </el-form-item>
         </el-form>
+
+        <div class="btns form-btn">
+            <el-button type="primary">修改</el-button>
+            <el-button>取消</el-button>
+        </div>
+
+        <el-dialog
+            v-model="infoForm.dialogFormVisible"
+            title="头像选择"
+            class="my-dialog"
+            :lock-scroll="true"
+            :destroy-on-close="true"
+            :close-on-click-modal="false"
+            @close="closeDialog(0)"
+        >
+            <vueCropper
+                ref="cropper"
+                :img="option.img"
+                :outputSize="option.outputSize"
+                :outputType="option.outputType"
+                :info="option.info"
+                :canScale="option.canScale"
+                :autoCrop="option.autoCrop"
+                :autoCropWidth="option.autoCropWidth"
+                :autoCropHeight="option.autoCropHeight"
+                :fixed="option.fixed"
+                :fixedNumber="option.fixedNumber"
+                :full="option.full"
+                :fixedBox="option.fixedBox"
+                :canMove="option.canMove"
+                :canMoveBox="option.canMoveBox"
+                :original="option.original"
+                :centerBox="option.centerBox"
+                :height="option.height"
+                :infoTrue="option.infoTrue"
+                :maxImgSize="option.maxImgSize"
+                :enlarge="option.enlarge"
+                :mode="option.mode"
+                @realTime="realTimeEvent"
+            ></vueCropper>
+            <div class="dialog-left">
+                <div
+                    class="show-preview"
+                    :style="{
+                        width: option.previews.w + 'px',
+                        height: option.previews.h + 'px',
+                        margin: '5px'
+                    }"
+                >
+                    <div :style="option.previews.div" class="preview">
+                        <img :src="option.previews.url" :style="option.previews.img" />
+                    </div>
+                </div>
+                <div class="btns">
+                    <el-button type="success" round @click="changePhoto">选择</el-button>
+                    <el-button type="primary" round @click="closeDialog(1)">确定</el-button>
+                </div>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -122,14 +121,38 @@ const cropper = ref()
 const infoForm = reactive({
     fileList: [],
     dialogFormVisible: false,
+    inputStyle: {
+        width: '196px'
+    },
     imgSrc: '',
-    name: '',
-    region: '',
-    date1: '',
-    date2: '',
-    delivery: false,
+    options: [
+        {
+            label: '前端',
+            value: 'web'
+        },
+        {
+            后端: '后端',
+            value: 'java'
+        }
+    ],
+    nickName: '',
+    work: '',
+    checkboxs: [
+        {
+            label: 'java',
+            value: '01'
+        },
+        {
+            label: 'python',
+            value: '02'
+        },
+        {
+            label: 'javascript',
+            value: '03'
+        }
+    ],
     type: [],
-    resource: '',
+    sex: '',
     desc: ''
 })
 interface Ioption {
@@ -166,6 +189,7 @@ const changePhoto = async () => {
     const windowURL = window.URL || window.webkitURL
     // console.log(windowURL.createObjectURL(files[0]))
     infoForm.dialogFormVisible = true
+    // console.log(infoForm.dialogFormVisible)
     nextTick(() => {
         console.log(files[0])
         const srcBlob = windowURL.createObjectURL(files[0])
@@ -175,6 +199,7 @@ const changePhoto = async () => {
 }
 
 const openDialog = async () => {
+    // console.log(infoForm.dialogFormVisible)
     if (infoForm.dialogFormVisible === true) {
         return
     }
@@ -220,22 +245,33 @@ const closeDialog = (val: Econfirm) => {
                 // do something
                 const windowURL = window.URL || window.webkitURL
                 const srcBlob = windowURL.createObjectURL(data)
-                console.log(srcBlob)
+                // console.log(srcBlob)
                 infoForm.imgSrc = srcBlob
-                infoForm.dialogFormVisible = false
             })
             break
     }
+    infoForm.dialogFormVisible = false
 }
+
+watch(infoForm, (nw) => {
+    console.log('nw', nw)
+})
 </script>
 
 <style lang="scss" scoped>
 .my-info {
+    :deep(.el-form-item__label-wrap) {
+        display: flex;
+        align-items: center;
+        padding: 0 28px 0 0;
+    }
+
     .avatar-box {
         width: 100px;
         height: 100px;
         border-radius: 50%;
         box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
     }
 
     .upload-avatar {
@@ -247,50 +283,56 @@ const closeDialog = (val: Econfirm) => {
         border: 1px dashed rgb(102, 111, 234);
         border-radius: 50%;
         cursor: pointer;
+    }
 
-        // :deep(.my-dialog) {
-        //     display: flex;
-        //     flex-direction: column;
-        //     justify-content: center;
-        //     align-items: center;
-        // }
-        :deep(.el-dialog__body) {
-            margin: 0 auto;
-            width: 900px;
-            height: 400px;
-            display: flex;
-            display: -webkit-flex;
+    .form-btn {
+        position: absolute;
+        bottom: 20px;
+        right: 50px;
+    }
 
-            .vue-cropper {
-                flex: 8;
-                .cropper-box {
-                    flex: 1;
-                    width: 100%;
-                    .cropper {
-                        width: 400px;
-                        height: 500px;
-                    }
+    :deep(.el-dialog__body) {
+        margin: 0 auto;
+        width: 900px;
+        height: 400px;
+        display: flex;
+        display: -webkit-flex;
+
+        .vue-cropper {
+            flex: 8;
+            border: 5px solid $prefecture-card-title-color;
+            border-radius: 2px;
+            .cropper-box {
+                flex: 1;
+                width: 100%;
+                .cropper {
+                    width: 400px;
+                    height: 500px;
                 }
             }
+        }
 
-            .dialog-left {
-                margin-left: 20px;
-                flex: 2;
+        .dialog-left {
+            margin-left: 20px;
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            .show-preview {
+                width: 200px;
                 display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                .show-preview {
-                    width: 200px;
-                    display: flex;
-                    display: -webkit-flex;
-                    justify-content: center;
-                    .preview {
-                        overflow: hidden;
-                        background: #cccccc;
-                        border-radius: 50%;
-                        border: 1px solid #cccccc;
-                    }
+                display: -webkit-flex;
+                justify-content: center;
+                .preview {
+                    overflow: hidden;
+                    background: #cccccc;
+                    border-radius: 50%;
+                    border: 5px solid $prefecture-card-title-color;
                 }
+            }
+            .btns {
+                display: flex;
+                justify-content: space-around;
             }
         }
     }

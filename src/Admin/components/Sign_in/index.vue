@@ -66,8 +66,7 @@ const loginData = reactive({
     password: '',
     phone: '',
     verifyCode: '',
-    verifyType: 'P',
-    key: store.key
+    verifyType: 'P'
 })
 const getCode = () => {
     store.getCode().then((res) => {
@@ -91,14 +90,25 @@ const reqLogin = () => {
         return
     }
 
+    if (loginData.verifyCode === '') {
+        ElMessage({
+            message: '验证码不能为空',
+            type: 'warning'
+        })
+        return
+    }
+
+    const data = {
+        ...loginData,
+        key: store.key
+    }
+
     myReq
         .request({
             method: 'POST',
             url: '/sys-user/login',
             data: {
-                data: {
-                    ...loginData
-                },
+                data,
                 meta: {
                     from: 'P',
                     token: ''
@@ -106,6 +116,7 @@ const reqLogin = () => {
             }
         })
         .then((res) => {
+            getCode()
             if (res.meta.code === '200') {
                 ElMessage({
                     message: res.meta.description,
@@ -114,7 +125,12 @@ const reqLogin = () => {
                     offset: 40,
                     duration: 1500,
                     onClose: () => {
-                        router.go(-1)
+                        // console.log(history.state.back)
+                        if (history.state.back) {
+                            router.go(-1)
+                        } else {
+                            router.push('/layout')
+                        }
                     }
                 })
                 store.token = res.meta.tocken ?? ''

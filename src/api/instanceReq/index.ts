@@ -4,7 +4,7 @@ const env = import.meta.env
 
 export const myReq = new RequestHy({
     baseURL: env.VITE_APP_BASE_API,
-    timeout: 5000,
+    timeout: 20000,
     interceptorsFn: {
         reqFn(config) {
             if (config?.data) {
@@ -20,20 +20,21 @@ export const myReq = new RequestHy({
             return err
         },
         resFn(res) {
-            // res.data = decrypt(res.data)
-
+            // console.log('res', res)
             if (res.data) {
                 Object.keys(res.data).forEach((v) => {
-                    res.data[v] = decrypt(res.data[v])
+                    // console.log('v', v)
+                    if (res.data[v]) res.data[v] = JSON.parse(decrypt(res.data[v]))
                 })
             }
             // console.log('res.data', res.data)
             // console.log('res.meta', res.data.meta)
             // console.log('res.data.data', res.data.data)
-
+            // console.log(JSON.parse(res.data.data))
             return res
         },
         resRejFn(err) {
+            console.log('err', err)
             return err
         }
     }

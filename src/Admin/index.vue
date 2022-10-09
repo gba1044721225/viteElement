@@ -21,7 +21,8 @@ const code = ref<string>('')
 //     console.log(nw, '11111')
 // })
 onMounted(() => {
-    store.actGetRandomKey()
+    // store.actGetRandomKey()
+    // console.log(store.key)
     store.getCode().then((res) => {
         code.value = res.data
     })
