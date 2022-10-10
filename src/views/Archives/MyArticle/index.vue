@@ -12,6 +12,6 @@
     </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts" name="MyArticle"></script>
 
 <style lang="scss" scoped></style>

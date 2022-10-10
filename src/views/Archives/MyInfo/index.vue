@@ -21,7 +21,14 @@
                     placeholder="请输入昵称"
                 />
             </el-form-item>
-            <el-form-item label="工作方向">
+            <el-form-item label="手机号">
+                <el-input
+                    :input-style="infoForm.inputStyle"
+                    v-model="infoForm.phone"
+                    placeholder="请输入手机号码"
+                />
+            </el-form-item>
+            <!-- <el-form-item label="工作方向">
                 <el-select v-model="infoForm.work" placeholder="请选择您的方向">
                     <el-option
                         v-for="item in infoForm.options"
@@ -30,9 +37,16 @@
                         :key="item.value"
                     />
                 </el-select>
+            </el-form-item> -->
+            <el-form-item label="邮箱">
+                <el-input
+                    :input-style="infoForm.inputStyle"
+                    v-model="infoForm.email"
+                    placeholder="请输入邮箱"
+                />
             </el-form-item>
             <el-form-item label="编程语言">
-                <el-checkbox-group v-model="infoForm.type">
+                <el-checkbox-group v-model="infoForm.languageList">
                     <el-checkbox-button
                         v-for="item in infoForm.checkboxs"
                         :label="item.value"
@@ -49,11 +63,36 @@
                     <el-radio border label="0"> 女 </el-radio>
                 </el-radio-group>
             </el-form-item>
+            <el-form-item label="座右铭">
+                <el-input
+                    :input-style="infoForm.inputStyle"
+                    v-model="infoForm.signature"
+                    placeholder="请输入座右铭"
+                />
+            </el-form-item>
+            <el-form-item label="新密码">
+                <el-input
+                    v-model="infoForm.comparePwd"
+                    :input-style="infoForm.inputStyle"
+                    type="password"
+                    autocomplete="off"
+                    placeholder="请输入新密码"
+                />
+            </el-form-item>
+            <el-form-item label="新密码">
+                <el-input
+                    v-model="infoForm.password"
+                    :input-style="infoForm.inputStyle"
+                    type="password"
+                    autocomplete="off"
+                    placeholder="请再次输入新密码"
+                />
+            </el-form-item>
         </el-form>
 
         <div class="btns form-btn">
-            <el-button type="primary">修改</el-button>
             <el-button>取消</el-button>
+            <el-button type="primary" @click="reqModify">修改</el-button>
         </div>
 
         <el-dialog
@@ -105,26 +144,32 @@
                 </div>
                 <div class="btns">
                     <el-button type="success" round @click="changePhoto">选择</el-button>
-                    <el-button type="primary" round @click="closeDialog(1)">确定</el-button>
+                    <el-button type="primary" round @click="closeDialog(1)">上传</el-button>
                 </div>
             </div>
         </el-dialog>
     </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" name="MyInfo">
 import { reactive, nextTick, ref } from 'vue'
 // import 'default-passive-events'
 import 'vue-cropper/dist/index.css'
 import { VueCropper } from 'vue-cropper'
+import { myReq } from '@/api/instanceReq/index'
+import { useLoginStore } from '@/store/index'
+import { encrypt } from '@/utils/storage/encry'
+import { getStorageFromKey } from '@/utils/storage/config'
+import { ElMessage } from 'element-plus'
 const cropper = ref()
 const infoForm = reactive({
-    fileList: [],
+    file: null,
     dialogFormVisible: false,
     inputStyle: {
         width: '196px'
     },
     imgSrc: '',
+    imgId: '',
     options: [
         {
             label: '前端',
@@ -136,7 +181,9 @@ const infoForm = reactive({
         }
     ],
     nickName: '',
-    work: '',
+    phone: '',
+    email: '',
+    // work: '',
     checkboxs: [
         {
             label: 'java',
@@ -151,9 +198,11 @@ const infoForm = reactive({
             value: '03'
         }
     ],
-    type: [],
+    languageList: [],
     sex: '',
-    desc: ''
+    signature: '',
+    comparePwd: '',
+    password: ''
 })
 interface Ioption {
     [index: string]: any
@@ -182,6 +231,8 @@ const option = reactive<Ioption>({
     mode: 'contain', // 图片默认渲染方式
     previews: {}
 })
+
+const store = useLoginStore()
 
 const changePhoto = async () => {
     const files: any = await uploadFile('image/*', true)
@@ -238,6 +289,47 @@ enum Econfirm {
     cancel = 0
 }
 
+const blobToFile = (theBlob: Blob, fileName: string): File => {
+    return new File(
+        [theBlob as any], // cast as any
+        fileName,
+        {
+            lastModified: new Date().getTime(),
+            type: theBlob.type
+        }
+    )
+}
+
+const reqUpload = () => {
+    const formdata = new FormData()
+    const file: File = blobToFile(infoForm.file as unknown as Blob, 'avatar')
+    // console.log(file, 'file')
+    formdata.append('file', file)
+    myReq
+        .request({
+            method: 'POST',
+            url: `/sys-file/upload/${encrypt(store.token)}/1`,
+            data: formdata,
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        .then((res) => {
+            console.log(res)
+            if (res.meta.code === '200') {
+                infoForm.imgSrc = res.data.url
+                infoForm.imgId = res.data.fileId
+            } else {
+                ElMessage({
+                    message: res.meta.description,
+                    grouping: true,
+                    customClass: 'el-custom-fail',
+                    offset: 40
+                })
+            }
+        })
+}
+
 const closeDialog = (val: Econfirm) => {
     switch (val) {
         case 1:
@@ -246,11 +338,40 @@ const closeDialog = (val: Econfirm) => {
                 const windowURL = window.URL || window.webkitURL
                 const srcBlob = windowURL.createObjectURL(data)
                 // console.log(srcBlob)
-                infoForm.imgSrc = srcBlob
+                // infoForm.imgSrc = srcBlob
+                infoForm.file = data
+                reqUpload()
             })
             break
     }
     infoForm.dialogFormVisible = false
+}
+
+const reqModify = () => {
+    console.log(111)
+    const data = {
+        user_id: JSON.parse(getStorageFromKey('loginData')).userId,
+        name: infoForm.nickName,
+        password: infoForm.password,
+        img_id: infoForm.imgId,
+        email: infoForm.email,
+        type: JSON.parse(getStorageFromKey('loginData')).type,
+        language: infoForm.languageList.join('|'),
+        signature: infoForm.signature,
+        phone: infoForm.phone
+    }
+    console.log(data)
+    // myReq.request({
+    //     method: 'POST',
+    //     url: '/sys-user/edit',
+    //     data: {
+    //         data,
+    //         meta: {
+    //             from: 'P',
+    //             token: store.token
+    //         }
+    //     }
+    // })
 }
 
 watch(infoForm, (nw) => {
@@ -300,8 +421,9 @@ watch(infoForm, (nw) => {
 
         .vue-cropper {
             flex: 8;
-            border: 5px solid $prefecture-card-title-color;
-            border-radius: 2px;
+            // border: 5px solid $prefecture-card-title-color;
+            box-shadow: 0px 0px 5px 5px $prefecture-card-title-color;
+            border-radius: 0px;
             .cropper-box {
                 flex: 1;
                 width: 100%;
@@ -327,7 +449,7 @@ watch(infoForm, (nw) => {
                     overflow: hidden;
                     background: #cccccc;
                     border-radius: 50%;
-                    border: 5px solid $prefecture-card-title-color;
+                    box-shadow: 0px 0px 5px 5px $prefecture-card-title-color;
                 }
             }
             .btns {

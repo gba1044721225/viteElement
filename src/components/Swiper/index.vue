@@ -23,7 +23,7 @@
         </swiper>
     </div>
 </template>
-<script setup>
+<script setup lang="ts">
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from 'swiper/vue'
 

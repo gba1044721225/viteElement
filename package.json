@@ -24,6 +24,7 @@
     "vue-router": "^4.0.13"
   },
   "devDependencies": {
+    "@rollup/plugin-dynamic-import-vars": "^2.0.0",
     "@types/crypto-js": "^4.1.1",
     "@types/node": "^18.7.14",
     "@typescript-eslint/eslint-plugin": "^5.33.1",

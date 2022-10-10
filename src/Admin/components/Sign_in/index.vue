@@ -41,6 +41,7 @@ import { useLoginStore } from '@/store/index'
 import { useRouter } from 'vue-router'
 import { verifyPhone, verifyName, verifyPassword } from '@/utils/verify'
 import { setStorage, getStorageFromKey } from '@/utils/storage/config'
+import { ElMessage } from 'element-plus'
 
 interface Props {
     img: string
@@ -102,7 +103,7 @@ const reqLogin = () => {
         ...loginData,
         key: store.key
     }
-
+    console.log('登录data', data)
     myReq
         .request({
             method: 'POST',
@@ -118,6 +119,7 @@ const reqLogin = () => {
         .then((res) => {
             getCode()
             if (res.meta.code === '200') {
+                console.log('登录信息', res)
                 ElMessage({
                     message: res.meta.description,
                     grouping: true,
@@ -134,11 +136,15 @@ const reqLogin = () => {
                     }
                 })
                 store.token = res.meta.tocken ?? ''
+                console.log(
+                    JSON.stringify({
+                        ...res.data
+                    })
+                )
                 setStorage(
                     'loginData',
                     JSON.stringify({
-                        phone: loginData.phone,
-                        password: loginData.password
+                        ...res.data
                     })
                 )
                 setStorage('token', res.meta.tocken)
@@ -163,7 +169,7 @@ const initLoginData = () => {
     if (getStorageFromKey('loginData')) {
         console.log(getStorageFromKey('loginData'))
         loginData.phone = JSON.parse(getStorageFromKey('loginData')).phone
-        loginData.password = JSON.parse(getStorageFromKey('loginData')).password
+        // loginData.password = JSON.parse(getStorageFromKey('loginData')).password
     }
 }
 

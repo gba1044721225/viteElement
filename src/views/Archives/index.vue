@@ -4,24 +4,89 @@
         <div class="tabbar">
             <el-card :body-style="{ minHeight: 'calc(100vh - 115px)' }">
                 <el-tabs type="border-card">
-                    <el-tab-pane label="个人信息">
-                        <my-info></my-info>
+                    <el-tab-pane
+                        v-for="(item, index) in tabPaneList"
+                        :label="item.label"
+                        :key="index"
+                    >
+                        <component :is="item.myCpt"></component>
                     </el-tab-pane>
-                    <el-tab-pane label="发布文章">
-                        <my-article></my-article>
-                    </el-tab-pane>
-                    <el-tab-pane label="我的关注">我的关注</el-tab-pane>
-                    <el-tab-pane label="我的收藏">我的收藏</el-tab-pane>
                 </el-tabs>
             </el-card>
         </div>
     </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" name="Archives">
 import LayoutHeader from '@/views/LayoutHeader/index.vue'
 import MyInfo from '@/views/Archives/MyInfo/index.vue'
 import MyArticle from '@/views/Archives/MyArticle/index.vue'
+import { shallowRef, onMounted } from 'vue'
+import type { Component } from 'vue'
+import { useLoginStore } from '@/store/index'
+import { encrypt } from '@/utils/storage/encry'
+import { getStorageFromKey } from '@/utils/storage/config'
+import { myReq } from '@/api/instanceReq/index'
+
+interface ItabPaneList {
+    label: string
+    myCpt: Component | undefined
+}
+const tabPaneList = shallowRef<ItabPaneList[]>([
+    {
+        label: '个人信息',
+        myCpt: MyInfo
+    },
+    {
+        label: '我的文章',
+        myCpt: MyArticle
+    }
+    // {
+    //     label: '我的关注',
+    //     myCpt: MyArticle
+    // },
+    // {
+    //     label: '我的收藏',
+    //     myCpt: MyArticle
+    // }
+])
+const store = useLoginStore()
+const reqMenuTab = () => {
+    myReq
+        .request({
+            method: 'POST',
+            url: `/sys-dict/dict/menu/${encrypt(store.token)}`
+        })
+        .then((res) => {
+            console.log(res)
+            const arr: ItabPaneList[] = []
+            const newTabList = tabPaneList.value
+            res.data.forEach((v: { dictName: string; remark: any }) => {
+                const obj: ItabPaneList = {
+                    label: '',
+                    myCpt: undefined
+                }
+                obj.label = v.dictName
+                obj.myCpt = defineAsyncComponent(
+                    () => import(`@/views/Archives/${v.remark}/index.vue`)
+                )
+                arr.push(obj)
+            })
+            console.log(arr)
+            tabPaneList.value = [...newTabList, ...arr]
+            triggerRef(tabPaneList)
+            console.log(tabPaneList.value)
+        })
+}
+onMounted(() => {
+    console.log(JSON.parse(getStorageFromKey('loginData')))
+    if (JSON.parse(getStorageFromKey('loginData'))) {
+        const loginData = JSON.parse(getStorageFromKey('loginData'))
+        if (loginData.type === '3') {
+            reqMenuTab()
+        }
+    }
+})
 </script>
 
 <style lang="scss" scoped>
