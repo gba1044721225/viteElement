@@ -1,9 +1,7 @@
 <template>
     <div class="custom-avatar" v-if="store.token">
         <el-dropdown>
-            <el-avatar
-                src="https://img0.baidu.com/it/u=2553753384,879501857&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1664298000&t=63b94171ef6c28e319179a8ed89e989f"
-            />
+            <el-avatar :src="store.imgSrc" />
             <template #dropdown>
                 <el-dropdown-menu>
                     <el-dropdown-item v-for="(item, index) in avatarList" :key="index">
@@ -60,7 +58,9 @@ const avatarList = reactive([
                     }
                 })
                 .then((res) => {
-                    console.log('退出', res)
+                    // console.log('退出', res)
+                    store.token = ''
+                    removeStorageFromKey('token')
                     if (res.meta.code === '200') {
                         ElMessage({
                             message: res.meta.description,
@@ -69,8 +69,6 @@ const avatarList = reactive([
                             offset: 40,
                             duration: 1500,
                             onClose: () => {
-                                store.token = ''
-                                removeStorageFromKey('token')
                                 router.push('/layout')
                             }
                         })

@@ -1,5 +1,5 @@
 <template>
-    <div>dit</div>
+    <div class="dictionary">词典管理</div>
 </template>
 
 <script setup lang="ts"></script>

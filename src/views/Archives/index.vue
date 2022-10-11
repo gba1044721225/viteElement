@@ -9,7 +9,7 @@
                         :label="item.label"
                         :key="index"
                     >
-                        <component :is="item.myCpt"></component>
+                        <component :is="item.myCpt" :languageList="languageList"></component>
                     </el-tab-pane>
                 </el-tabs>
             </el-card>
@@ -28,6 +28,10 @@ import { encrypt } from '@/utils/storage/encry'
 import { getStorageFromKey } from '@/utils/storage/config'
 import { myReq } from '@/api/instanceReq/index'
 
+interface Ilanguage {
+    label?: string
+    value?: string
+}
 interface ItabPaneList {
     label: string
     myCpt: Component | undefined
@@ -50,6 +54,7 @@ const tabPaneList = shallowRef<ItabPaneList[]>([
     //     myCpt: MyArticle
     // }
 ])
+const languageList = ref()
 const store = useLoginStore()
 const reqMenuTab = () => {
     myReq
@@ -58,10 +63,20 @@ const reqMenuTab = () => {
             url: `/sys-dict/dict/menu/${encrypt(store.token)}`
         })
         .then((res) => {
-            console.log(res)
+            console.log('reqMenuTab', res)
+            const arrL: Ilanguage[] = []
+            res.data.languages.forEach(
+                (v: { dictName: string | undefined; dictVal: string | undefined }) => {
+                    const obj: Ilanguage = {}
+                    obj.label = v.dictName
+                    obj.value = v.dictVal
+                    arrL.push(obj)
+                }
+            )
+            languageList.value = arrL
             const arr: ItabPaneList[] = []
             const newTabList = tabPaneList.value
-            res.data.forEach((v: { dictName: string; remark: any }) => {
+            res.data.menu.forEach((v: { dictName: string; remark: any }) => {
                 const obj: ItabPaneList = {
                     label: '',
                     myCpt: undefined
@@ -75,17 +90,23 @@ const reqMenuTab = () => {
             console.log(arr)
             tabPaneList.value = [...newTabList, ...arr]
             triggerRef(tabPaneList)
-            console.log(tabPaneList.value)
+            // console.log(tabPaneList.value)
         })
 }
-onMounted(() => {
-    console.log(JSON.parse(getStorageFromKey('loginData')))
+
+const init = () => {
     if (JSON.parse(getStorageFromKey('loginData'))) {
         const loginData = JSON.parse(getStorageFromKey('loginData'))
-        if (loginData.type === '3') {
+        if (loginData.type === 's') {
             reqMenuTab()
         }
     }
+}
+
+onMounted(() => {
+    console.log(getStorageFromKey('loginData'))
+
+    init()
 })
 </script>
 

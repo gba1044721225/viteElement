@@ -48,7 +48,7 @@
             <el-form-item label="编程语言">
                 <el-checkbox-group v-model="infoForm.languageList">
                     <el-checkbox-button
-                        v-for="item in infoForm.checkboxs"
+                        v-for="item in languageList"
                         :label="item.value"
                         name="type"
                         :key="item.value"
@@ -152,7 +152,7 @@
 </template>
 
 <script setup lang="ts" name="MyInfo">
-import { reactive, nextTick, ref } from 'vue'
+import { reactive, nextTick, ref, onMounted, withDefaults } from 'vue'
 // import 'default-passive-events'
 import 'vue-cropper/dist/index.css'
 import { VueCropper } from 'vue-cropper'
@@ -161,6 +161,24 @@ import { useLoginStore } from '@/store/index'
 import { encrypt } from '@/utils/storage/encry'
 import { getStorageFromKey } from '@/utils/storage/config'
 import { ElMessage } from 'element-plus'
+interface Ilanguage {
+    [index: string]: string
+}
+interface Props {
+    languageList: Ilanguage[] | never[]
+}
+const props = withDefaults(defineProps<Props>(), {
+    languageList: () => [
+        {
+            label: '前端',
+            value: 'web'
+        },
+        {
+            label: '后端',
+            value: 'java'
+        }
+    ]
+})
 const cropper = ref()
 const infoForm = reactive({
     file: null,
@@ -170,34 +188,12 @@ const infoForm = reactive({
     },
     imgSrc: '',
     imgId: '',
-    options: [
-        {
-            label: '前端',
-            value: 'web'
-        },
-        {
-            后端: '后端',
-            value: 'java'
-        }
-    ],
+    options: [],
     nickName: '',
     phone: '',
     email: '',
     // work: '',
-    checkboxs: [
-        {
-            label: 'java',
-            value: '01'
-        },
-        {
-            label: 'python',
-            value: '02'
-        },
-        {
-            label: 'javascript',
-            value: '03'
-        }
-    ],
+    // checkboxs: [],
     languageList: [],
     sex: '',
     signature: '',
@@ -302,7 +298,7 @@ const blobToFile = (theBlob: Blob, fileName: string): File => {
 
 const reqUpload = () => {
     const formdata = new FormData()
-    const file: File = blobToFile(infoForm.file as unknown as Blob, 'avatar')
+    const file: File = blobToFile(infoForm.file as unknown as Blob, 'avatar' + new Date().getTime())
     // console.log(file, 'file')
     formdata.append('file', file)
     myReq
@@ -350,29 +346,63 @@ const closeDialog = (val: Econfirm) => {
 const reqModify = () => {
     console.log(111)
     const data = {
-        user_id: JSON.parse(getStorageFromKey('loginData')).userId,
-        name: infoForm.nickName,
-        password: infoForm.password,
-        img_id: infoForm.imgId,
-        email: infoForm.email,
-        type: JSON.parse(getStorageFromKey('loginData')).type,
-        language: infoForm.languageList.join('|'),
-        signature: infoForm.signature,
-        phone: infoForm.phone
+        userId: JSON.parse(getStorageFromKey('loginData')).userId,
+        name: infoForm.nickName === '' ? null : infoForm.nickName,
+        password: infoForm.password === '' ? null : infoForm.password,
+        imgId: infoForm.imgId === '' ? null : infoForm.imgId,
+        email: infoForm.email === '' ? null : infoForm.email,
+        language: infoForm.languageList.join('|') === '' ? null : infoForm.languageList.join('|'),
+        signature: infoForm.signature === '' ? null : infoForm.signature,
+        phone: infoForm.phone === '' ? null : infoForm.phone
     }
     console.log(data)
-    // myReq.request({
-    //     method: 'POST',
-    //     url: '/sys-user/edit',
-    //     data: {
-    //         data,
-    //         meta: {
-    //             from: 'P',
-    //             token: store.token
-    //         }
-    //     }
-    // })
+    myReq
+        .request({
+            method: 'POST',
+            url: '/sys-user/edit',
+            data: {
+                data,
+                meta: {
+                    from: 'P',
+                    token: store.token
+                }
+            }
+        })
+        .then((res) => {
+            console.log('res', res)
+            if (res.meta.code === '200') {
+                ElMessage({
+                    message: res.meta.description,
+                    grouping: true,
+                    customClass: 'el-custom-succ',
+                    offset: 40,
+                    duration: 1500
+                })
+            } else {
+                ElMessage({
+                    message: res.meta.description,
+                    grouping: true,
+                    customClass: 'el-custom-fail',
+                    offset: 40
+                })
+            }
+        })
 }
+
+const init = () => {
+    const loginData = JSON.parse(getStorageFromKey('loginData'))
+    // console.log('loginData', loginData)
+    infoForm.email = loginData.email
+    infoForm.imgId = loginData.imgId
+    infoForm.nickName = loginData.name
+    infoForm.phone = loginData.phone
+    infoForm.imgSrc = loginData.imgUrl
+}
+
+onMounted(() => {
+    console.log('props', props)
+    init()
+})
 
 watch(infoForm, (nw) => {
     console.log('nw', nw)
@@ -412,9 +442,13 @@ watch(infoForm, (nw) => {
         right: 50px;
     }
 
+    :deep(.el-dialog) {
+        min-width: 950px;
+        width: 1200px;
+    }
     :deep(.el-dialog__body) {
         margin: 0 auto;
-        width: 900px;
+        // width: 950px;
         height: 400px;
         display: flex;
         display: -webkit-flex;
@@ -435,7 +469,7 @@ watch(infoForm, (nw) => {
         }
 
         .dialog-left {
-            margin-left: 20px;
+            margin-left: 50px;
             flex: 2;
             display: flex;
             flex-direction: column;

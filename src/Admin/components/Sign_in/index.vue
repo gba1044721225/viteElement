@@ -117,7 +117,6 @@ const reqLogin = () => {
             }
         })
         .then((res) => {
-            getCode()
             if (res.meta.code === '200') {
                 console.log('登录信息', res)
                 ElMessage({
@@ -149,6 +148,7 @@ const reqLogin = () => {
                 )
                 setStorage('token', res.meta.tocken)
             } else {
+                getCode()
                 ElMessage({
                     message: res.meta.description,
                     grouping: true,
