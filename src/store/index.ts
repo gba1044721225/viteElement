@@ -57,7 +57,10 @@ export const useLoginStore = defineStore('headerLogin', {
             },
             signUpCode: 500,
             token: getStorageFromKey('token'),
-            imgSrc: JSON.parse(getStorageFromKey('loginData')).imgUrl,
+            imgUrl:
+                JSON.parse(getStorageFromKey('loginData')) !== undefined
+                    ? JSON.parse(getStorageFromKey('loginData'))?.imgUrl
+                    : '',
             from: '',
             key: ''
         }

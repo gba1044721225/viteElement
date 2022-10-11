@@ -1,7 +1,7 @@
 <template>
     <div class="custom-avatar" v-if="store.token">
         <el-dropdown>
-            <el-avatar :src="store.imgSrc" />
+            <el-avatar :src="store.imgUrl" />
             <template #dropdown>
                 <el-dropdown-menu>
                     <el-dropdown-item v-for="(item, index) in avatarList" :key="index">

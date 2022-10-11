@@ -91,7 +91,7 @@
         </el-form>
 
         <div class="btns form-btn">
-            <el-button>取消</el-button>
+            <el-button @click="cancelChange">取消</el-button>
             <el-button type="primary" @click="reqModify">修改</el-button>
         </div>
 
@@ -159,7 +159,7 @@ import { VueCropper } from 'vue-cropper'
 import { myReq } from '@/api/instanceReq/index'
 import { useLoginStore } from '@/store/index'
 import { encrypt } from '@/utils/storage/encry'
-import { getStorageFromKey } from '@/utils/storage/config'
+import { getStorageFromKey, setStorage } from '@/utils/storage/config'
 import { ElMessage } from 'element-plus'
 interface Ilanguage {
     [index: string]: string
@@ -343,6 +343,10 @@ const closeDialog = (val: Econfirm) => {
     infoForm.dialogFormVisible = false
 }
 
+const cancelChange = () => {
+    init()
+}
+
 const reqModify = () => {
     console.log(111)
     const data = {
@@ -370,7 +374,17 @@ const reqModify = () => {
         })
         .then((res) => {
             console.log('res', res)
+            // console.log(getStorageFromKey('loginData'))
+            const loginData = JSON.parse(getStorageFromKey('loginData'))
             if (res.meta.code === '200') {
+                Object.keys(res.data).forEach((v) => {
+                    console.log('loginData[v]', loginData[v])
+                    console.log('res.data[v]', res.data[v])
+                    loginData[v] = res.data[v]
+                })
+                store.imgUrl = loginData.imgUrl
+                console.log('loginData.imgSrc', loginData.imgSrc)
+                setStorage('loginData', JSON.stringify(loginData))
                 ElMessage({
                     message: res.meta.description,
                     grouping: true,
@@ -397,6 +411,7 @@ const init = () => {
     infoForm.nickName = loginData.name
     infoForm.phone = loginData.phone
     infoForm.imgSrc = loginData.imgUrl
+    infoForm.languageList = loginData.language.split(',')
 }
 
 onMounted(() => {
