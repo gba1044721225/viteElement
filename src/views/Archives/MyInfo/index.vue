@@ -411,7 +411,9 @@ const init = () => {
     infoForm.nickName = loginData.name
     infoForm.phone = loginData.phone
     infoForm.imgSrc = loginData.imgUrl
-    infoForm.languageList = loginData.language.split(',')
+    if (loginData.language) {
+        infoForm.languageList = loginData.language.split('|')
+    }
 }
 
 onMounted(() => {

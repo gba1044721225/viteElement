@@ -87,10 +87,13 @@ const reqMenuTab = () => {
                 )
                 arr.push(obj)
             })
-            console.log(arr)
+            // console.log(arr)
             tabPaneList.value = [...newTabList, ...arr]
             triggerRef(tabPaneList)
             // console.log(tabPaneList.value)
+        })
+        .catch((err) => {
+            console.log('err', err)
         })
 }
 
@@ -104,7 +107,7 @@ const init = () => {
 }
 
 onMounted(() => {
-    console.log(getStorageFromKey('loginData'))
+    // console.log(getStorageFromKey('loginData'))
 
     init()
 })
