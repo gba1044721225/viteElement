@@ -101,6 +101,7 @@ const init = () => {
     if (JSON.parse(getStorageFromKey('loginData'))) {
         const loginData = JSON.parse(getStorageFromKey('loginData'))
         if (loginData.type === 's') {
+            // console.log(1111)
             reqMenuTab()
         }
     }

@@ -79,7 +79,7 @@
                     placeholder="请输入新密码"
                 />
             </el-form-item>
-            <el-form-item label="新密码">
+            <el-form-item label="新密码(再次)">
                 <el-input
                     v-model="infoForm.password"
                     :input-style="infoForm.inputStyle"
